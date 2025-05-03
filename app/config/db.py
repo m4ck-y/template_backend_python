@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm.session import sessionmaker, Session as SessionDB
 from sqlalchemy.ext.declarative import declarative_base
 
-from config.env import SQLALCHEMY_DB_URL, DEBUG
+from app.config.env import SQLALCHEMY_DB_URL, DEBUG
 
 print("DEBUG: ", DEBUG)
 

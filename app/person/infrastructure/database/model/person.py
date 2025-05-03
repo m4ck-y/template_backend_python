@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
 from app.config.db import PublicBase
@@ -14,3 +14,10 @@ class Person(PublicBase):
     last_name = Column(String, nullable=False)
     second_last_name = Column(String)
     type_gender = Column(Enum(EGenderIdentity), nullable=False, default=EGenderIdentity.NO_ESPECIFICADO)
+
+    birth_info = relationship("BirthInfo", back_populates="person", uselist=False)
+    sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
+    legal_info = relationship("LegalInfo", back_populates="person", uselist=False)
+    user = relationship("User", back_populates="person", uselist=False)
+    profile = relationship("Profile", back_populates="person", uselist=False)
+    person_metrics = relationship("PersonMetrics", back_populates="person")
