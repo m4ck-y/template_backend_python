@@ -29,13 +29,21 @@ class Person(PublicBase):
     # 1:N | 1 person -> N document
     list_documents = relationship("Document", back_populates="person")
 
-
+    # CONTACT INFO
     # 1:N | 1 person -> N address
     list_addresses = relationship("Address", back_populates="person")
     # 1:N | 1 person -> N phone
     list_phones = relationship("Phone", back_populates="person")
     # 1:N | 1 person -> N email
     list_emails = relationship("Email", back_populates="person")
+
+
+    # HEALTH
+    # 1:1 | 1 person -> 1 health_info
+    health_info = relationship("HealthInfo", back_populates="person", uselist=False)
+
+    # 1:N | 1 person -> N measurement
+    list_measurements = relationship("Measurement", back_populates="person")
 
 
 

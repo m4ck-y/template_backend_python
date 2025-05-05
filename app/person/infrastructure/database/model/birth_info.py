@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Enum, DATETIME, Foreig
 from sqlalchemy.orm import relationship
 from app.config.db import Base
 
-from .base import SchemaPerson
+from ..base import SchemaPerson
 
 class BirthInfo(Base):
     __tablename__ = SchemaPerson('birth_info')

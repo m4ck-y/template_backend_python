@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 from app.config.db import Base
 from app.person.domain.enum.identifier import EIdentifierType
-from app.person.infrastructure.database.model.base import SchemaPerson
+from app.person.infrastructure.database.base import SchemaPerson
 
 class IdentifierType(Base):
     __tablename__ = SchemaPerson('identifier_type')

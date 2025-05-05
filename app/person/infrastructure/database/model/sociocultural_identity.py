@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from app.config.db import Base
 from app.person.domain.enum.answer import EAnswerGeneral, EAnswerMigrant
 
-from .base import SchemaPerson
+from ..base import SchemaPerson
 
 class SocioculturalIdentity(Base):
     __tablename__ = SchemaPerson('sociocultural_identity')

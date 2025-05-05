@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.config.db import Base
-from app.person.infrastructure.database.model.base import SchemaPerson
+from app.person.infrastructure.database.base import SchemaPerson
 from app.person.domain.enum.civil_status import ECivilStatus
 from app.person.domain.enum.curp_sex import CURPSex
 

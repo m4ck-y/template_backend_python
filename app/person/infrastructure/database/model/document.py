@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from app.config.db import Base
-from app.person.infrastructure.database.model.base import SchemaPerson
+from app.person.infrastructure.database.base import SchemaPerson
 
 class Document(Base):
 
