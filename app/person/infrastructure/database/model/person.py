@@ -30,6 +30,14 @@ class Person(PublicBase):
     list_documents = relationship("Document", back_populates="person")
 
 
+    # 1:N | 1 person -> N address
+    list_addresses = relationship("Address", back_populates="person")
+    # 1:N | 1 person -> N phone
+    list_phones = relationship("Phone", back_populates="person")
+    # 1:N | 1 person -> N email
+    list_emails = relationship("Email", back_populates="person")
+
+
 
 
     #user = relationship("User", back_populates="person", uselist=False)

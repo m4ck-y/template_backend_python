@@ -11,8 +11,11 @@ from app.person.infrastructure.database.model.document import Document
 from app.person.infrastructure.database.model.document_identifier import DocumentIdentifier
 from app.person.infrastructure.database.model.person_identifier import PersonIdentifier
 
-
 #CONTACT INFO
+from app.person.infrastructure.database.model.address import Address
+from app.person.infrastructure.database.model.phone import Phone
+from app.person.infrastructure.database.model.email import Email
+
 
 def init():
     print("init >>> person")
