@@ -15,6 +15,10 @@ class PersonIdentifier(Base):
 
     id_identifier_type = Column(Integer, ForeignKey(f'{SchemaPerson("identifier_type")}.id'), nullable=False)
     # 1 person_identifier -> 1 identifier_type
-    identifier_type = relationship("IdentifierType", back_populates="list_person_identifiers")
+    identifier_type = relationship("IdentifierType", back_populates="list_person_identifiers", uselist=False)
 
     identifier_value = Column(String, nullable=False)
+
+    #RELATIONSHIPS
+    # 1:1 | 1 person_identifier -> 1 document_identifier
+    document_identifier = relationship("DocumentIdentifier", back_populates="person_identifier")

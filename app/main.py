@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],  # Permite todos los encabezados
 )
 
-init()
-
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host=API_HOST, port=API_PORT, reload=True)
+    #uvicorn.run("app.main:app", host=API_HOST, port=API_PORT, reload=True)
+    init()
+    uvicorn.run("app.main:app", host=API_HOST, port=API_PORT)

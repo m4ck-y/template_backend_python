@@ -11,7 +11,7 @@ class DocumentType(Base):
 
     id_category = Column(Integer, ForeignKey(f'{SchemaPerson("document_category")}.id'), nullable=False)
     # 1 document_type -> 1 category
-    category = relationship("DocumentCategory", back_populates="document_types")
+    category = relationship("DocumentCategory", back_populates="list_document_types")
 
     # 1:N | 1 document_type -> N documents     
     list_documents = relationship("Document", back_populates="document_type")

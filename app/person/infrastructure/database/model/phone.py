@@ -11,7 +11,7 @@ class Phone(Base):
 
     id_person = Column(Integer, ForeignKey('person.id'))
     # 1 phone -> 1 person
-    user = relationship("Person", back_populates="list_phones")
+    person = relationship("Person", back_populates="list_phones")
     
     type_phone = Column(Enum(EPhoneType), nullable=False)
     code = Column(String(191), nullable=False)#COUNTRY

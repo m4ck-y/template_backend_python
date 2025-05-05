@@ -26,3 +26,7 @@ class Document(Base):
     expires_at = Column(Date, nullable=False)
     verification_status = Column(String, nullable=False)
     verified_by = Column(String, nullable=False)
+
+    # RELATIONSHIPS
+    # 1:1 | 1 document -> 1 document_identifier
+    document_identifier = relationship("DocumentIdentifier", back_populates="document")
