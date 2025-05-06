@@ -3,7 +3,7 @@ from typing import Generator
 import pytz
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm.session import sessionmaker, Session as SessionDB
+from sqlalchemy.orm.session import sessionmaker, Session as TSession
 from sqlalchemy.ext.declarative import declarative_base
 
 from app.config.env import SQLALCHEMY_DB_URL, DEBUG
@@ -13,7 +13,7 @@ print("DEBUG: ", DEBUG)
 engine = create_engine(SQLALCHEMY_DB_URL, echo=DEBUG)
 Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
-def GetSession() -> Generator[SessionDB, None, None]:
+def GetSession() -> Generator[TSession, None, None]:
     db = Session()
     try:
         yield db
