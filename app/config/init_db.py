@@ -2,7 +2,7 @@ from app.person.infrastructure.database.init import init as init_person
 from app.health.infrastructure.database.init import init as init_health, Seeder as SeederHealth
 from app.config.db import Base, engine
 
-def init():
+def init_db():
 
     print("init >>> db ... ") 
     init_person()
