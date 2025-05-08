@@ -8,7 +8,6 @@ class MeasureGroup(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)  # Nombre del grupo
-    description = Column(Text)  # Descripción opcional del grupo
 
     #RELATIONSHIPS
     # 1:N | measure_group -> measure_type_group

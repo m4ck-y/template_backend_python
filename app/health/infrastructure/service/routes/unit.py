@@ -10,7 +10,7 @@ from app.health.domain.schemas.unit import (
 from app.health.application.unit import UnitApplication
 from app.config.db import GetSession
 
-router = APIRouter(prefix="/units", tags=["Units"])
+router = APIRouter(prefix="/unit", tags=["Unit"])
 
 # Aplicación inyectada desde setup externo (por ejemplo, main.py)
 app_layer: UnitApplication = None
@@ -29,6 +29,19 @@ def setup_service(application_layer: UnitApplication):
     print("Application layer injected", app_layer)
     return app_layer
 
+@router.post("/", response_model=int)
+async def Create(data: C, db: Session = Depends(GetSession)) -> int:
+    """
+    Create a new unit of measurement.
+    """
+    return app_layer.Create(data, db)
+
+@router.get("/list", response_model=List[E])
+async def List(db: Session = Depends(GetSession)) -> list[E]:
+    """
+    List all units of measurement.
+    """
+    return app_layer.List(db)
 
 @router.get("/{id}", response_model=E)
 async def Get(id: int, db: Session = Depends(GetSession)) -> E | None:
@@ -37,23 +50,6 @@ async def Get(id: int, db: Session = Depends(GetSession)) -> E | None:
     """
     return app_layer.Get(id, db)
 
-
-@router.get("/", response_model=List[E])
-async def List(db: Session = Depends(GetSession)) -> list[E]:
-    """
-    List all units of measurement.
-    """
-    return app_layer.List(db)
-
-
-@router.post("/", response_model=int)
-async def Create(data: C, db: Session = Depends(GetSession)) -> int:
-    """
-    Create a new unit of measurement.
-    """
-    return app_layer.Create(data, db)
-
-
 @router.put("/", response_model=bool)
 async def Update(data: U, db: Session = Depends(GetSession)) -> bool:
     """
@@ -61,10 +57,9 @@ async def Update(data: U, db: Session = Depends(GetSession)) -> bool:
     """
     return app_layer.Update(data, db)
 
-
-@router.delete("/{unit_id}", response_model=bool)
-async def Delete(unit_id: int, db: Session = Depends(GetSession)) -> bool:
+@router.delete("/{id}", response_model=bool)
+async def Delete(id: int, db: Session = Depends(GetSession)) -> bool:
     """
     Delete a unit by its ID.
     """
-    return app_layer.Delete(unit_id, db)
+    return app_layer.Delete(id, db)
