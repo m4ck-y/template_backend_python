@@ -1,12 +1,12 @@
 from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.config.db import Base
-from app.person.infrastructure.database.base import SchemaPerson
+from app.config.db import BaseModel
+from app.person.infrastructure.database.schema import SchemaPerson
 from app.person.domain.enum.civil_status import ECivilStatus
 from app.person.domain.enum.curp_sex import CURPSex
 
-class LegalInfo(Base):
+class LegalInfo(BaseModel):
     __tablename__ = SchemaPerson('legal_info')
 
     id = Column(Integer, primary_key=True)

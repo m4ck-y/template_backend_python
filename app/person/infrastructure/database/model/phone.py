@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
-from app.config.db import Base
+from app.config.db import BaseModel
 from app.person.domain.enum.contact_type import EPhoneType
-from app.person.infrastructure.database.base import SchemaPerson
+from app.person.infrastructure.database.schema import SchemaPerson
 
-class Phone(Base):
+class Phone(BaseModel):
     __tablename__ = SchemaPerson("phone")
     id = Column(Integer, primary_key=True, autoincrement=True)
 

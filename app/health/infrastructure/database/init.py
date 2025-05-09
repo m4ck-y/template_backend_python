@@ -154,13 +154,13 @@ def Seeder():
    
 
     # Crear y agregar los grupos de medición
-    measure_group_general = MeasureGroup(name="Generales", description="Grupos de medidas generales.")
-    measure_group_temperature = MeasureGroup(name="Temperatura", description="Grupos relacionados con unidades de temperatura como °C.")
-    measure_group_pulse = MeasureGroup(name="Pulso", description="Grupos relacionados con la medición del pulso o ritmo cardíaco.")
-    measure_group_skinfold = MeasureGroup(name="Pliegues", description="Grupos relacionados con la medición de pliegues de la piel.")
-    measure_group_circumference = MeasureGroup(name="Circunferencias", description="Grupos relacionados con la medición de circunferencias de distintas partes del cuerpo.")
-    measure_group_diameter = MeasureGroup(name="Diámetros", description="Grupos relacionados con la medición de diámetros de diversos objetos o partes del cuerpo.")
-    measure_group_length = MeasureGroup(name="Longitudes", description="Grupos relacionados con la medición de longitudes como altura o longitud de extremidades.")
+    measure_group_general = MeasureGroup(name="Generales")
+    measure_group_temperature = MeasureGroup(name="Temperatura")
+    measure_group_pulse = MeasureGroup(name="Pulso")
+    measure_group_skinfold = MeasureGroup(name="Pliegues")
+    measure_group_circumference = MeasureGroup(name="Circunferencias")
+    measure_group_diameter = MeasureGroup(name="Diámetros")
+    measure_group_length = MeasureGroup(name="Longitudes")
 
     # Agregar los grupos si no existen en la base de datos
     if not session.query(MeasureGroup).first():

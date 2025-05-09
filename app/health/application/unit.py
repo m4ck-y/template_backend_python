@@ -3,8 +3,8 @@ from app.utils.domain.repository.base import TSession
 from app.health.domain.repository.unit import IRepositoryUnit as IRepository
 from app.health.domain.schemas.unit import (
     SchemaUnit as E,
-    SchemaUnitCreate as C,
-    SchemaUnitUpdate as U,
+    SchemaCreateUnit as C,
+    SchemaUpdateUnit as U,
 )
 
 class UnitApplication:

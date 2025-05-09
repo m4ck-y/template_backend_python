@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from app.config.db import Base
+from app.config.db import BaseModel
 from app.person.domain.enum.contact_type import EAddressType
-from app.person.infrastructure.database.base import SchemaPerson
+from app.person.infrastructure.database.schema import SchemaPerson
 
-class Address(Base):
+class Address(BaseModel):
     __tablename__ = SchemaPerson('address')
     id = Column(Integer, primary_key=True, autoincrement=True)
 

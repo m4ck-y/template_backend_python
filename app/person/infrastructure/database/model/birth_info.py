@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, DateTime, Enum, DATETIME, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import Base
+from app.config.db import BaseModel
 
-from ..base import SchemaPerson
+from ..schema import SchemaPerson
 
-class BirthInfo(Base):
+class BirthInfo(BaseModel):
     __tablename__ = SchemaPerson('birth_info')
 
     id = Column(Integer, primary_key=True)

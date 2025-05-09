@@ -1,12 +1,12 @@
 from sqlalchemy import Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import Base
+from app.config.db import BaseModel
 from app.health.domain.enum.biological_sex import EBiologicalSex
 from app.health.domain.enum.blood_type import EBloodType
 
-from ..base import SchemaHealth
+from ..schema import SchemaHealth
 
-class HealthInfo(Base):
+class HealthInfo(BaseModel):
     __tablename__ = SchemaHealth('health_info')
 
     id = Column(Integer, primary_key=True)

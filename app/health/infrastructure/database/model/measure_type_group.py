@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import Base
-from ..base import SchemaHealth
+from app.config.db import BaseModel
+from ..schema import SchemaHealth
 
-class MeasureTypeGroup(Base):
+class MeasureTypeGroup(BaseModel):
     __tablename__ = SchemaHealth('measure_type_group')  # Nombre de la tabla
 
     id_measure_type = Column(Integer, ForeignKey(f'{SchemaHealth("measure_type")}.id'), primary_key=True)

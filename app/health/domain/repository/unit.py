@@ -4,10 +4,9 @@ from typing import List, Optional
 from app.utils.domain.repository.base import TSession  # Tipado para la sesión de base de datos
 from app.health.domain.schemas.unit import (
     SchemaUnit as E,
-    SchemaUnitCreate as C,
-    SchemaUnitUpdate as U,
+    SchemaCreateUnit as C,
+    SchemaUpdateUnit as U,
 )
-
 
 class IRepositoryUnit(ABC):
     """

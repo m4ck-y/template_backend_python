@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
-from app.config.db import Base
-from app.person.infrastructure.database.base import SchemaPerson
+from app.config.db import BaseModel
+from app.person.infrastructure.database.schema import SchemaPerson
 
-class Document(Base):
+class Document(BaseModel):
 
     __tablename__ = SchemaPerson('document')
 

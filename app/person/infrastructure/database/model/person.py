@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
-from app.config.db import PublicBase
+from app.config.db import BaseModel
 from app.person.domain.enum.gender import EGenderIdentity
 from app.utils.enum.verification_status import EVerificationStatus
 
-class Person(PublicBase):
+class Person(BaseModel):
     __tablename__ = 'person'
     id = Column(Integer, primary_key=True)
     verification_status = Column(Enum(EVerificationStatus), nullable=False, default=EVerificationStatus.PENDING)

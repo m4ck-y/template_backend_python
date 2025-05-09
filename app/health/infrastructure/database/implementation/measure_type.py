@@ -1,15 +1,15 @@
 from typing import Optional, List
 from sqlalchemy.orm import Session
 from app.config.db import datetime_now
-from app.health.domain.repository.unit import IRepositoryUnit as IRepository
-from app.health.infrastructure.database.model.unit import Unit as Table
-from app.health.domain.schemas.unit import (
-    SchemaUnit as E,
-    SchemaCreateUnit as C,
-    SchemaUpdateUnit as U,
+from app.health.domain.repository.measure_type import IRepositoryMeasureType as IRepository
+from app.health.infrastructure.database.model.measure_type import MeasureType as Table
+from app.health.domain.schemas.measure_type import (
+    SchemaMeasureType as E,
+    SchemaCreateMeasureType as C,
+    SchemaUpdateMeasureType as U,
 )
 
-class UnitRepository(IRepository):
+class MeasureTypeRepository(IRepository):
 
     def Create(self, entity: C, db: Session) -> int:
         new_entity = Table(**entity.model_dump())

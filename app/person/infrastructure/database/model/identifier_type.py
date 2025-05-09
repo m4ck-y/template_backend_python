@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
-from app.config.db import Base
+from app.config.db import BaseModel
 from app.person.domain.enum.identifier import EIdentifierType
-from app.person.infrastructure.database.base import SchemaPerson
+from app.person.infrastructure.database.schema import SchemaPerson
 
-class IdentifierType(Base):
+class IdentifierType(BaseModel):
     __tablename__ = SchemaPerson('identifier_type')
 
     id = Column(Integer, primary_key=True)

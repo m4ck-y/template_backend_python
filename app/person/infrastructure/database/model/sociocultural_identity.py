@@ -1,12 +1,12 @@
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.config.db import Base
+from app.config.db import BaseModel
 from app.person.domain.enum.answer import EAnswerGeneral, EAnswerMigrant
 
-from ..base import SchemaPerson
+from ..schema import SchemaPerson
 
-class SocioculturalIdentity(Base):
+class SocioculturalIdentity(BaseModel):
     __tablename__ = SchemaPerson('sociocultural_identity')
 
     id = Column(Integer, primary_key=True)

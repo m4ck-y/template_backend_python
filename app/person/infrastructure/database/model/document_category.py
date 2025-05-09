@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from app.config.db import Base
-from app.person.infrastructure.database.base import SchemaPerson
+from app.config.db import BaseModel
+from app.person.infrastructure.database.schema import SchemaPerson
 
-class DocumentCategory(Base):
+class DocumentCategory(BaseModel):
 
     __tablename__ = SchemaPerson('document_category')
 

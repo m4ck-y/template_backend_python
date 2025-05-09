@@ -4,19 +4,19 @@ from typing import List
 
 from app.health.domain.schemas.unit import (
     SchemaUnit as E,
-    SchemaUnitCreate as C,
-    SchemaUnitUpdate as U,
+    SchemaCreateUnit as C,
+    SchemaUpdateUnit as U,
 )
-from app.health.application.unit import UnitApplication
+from app.health.application.unit import UnitApplication as ApplicationLayer
 from app.config.db import GetSession
 
 router = APIRouter(prefix="/unit", tags=["Unit"])
 
 # Aplicación inyectada desde setup externo (por ejemplo, main.py)
-app_layer: UnitApplication = None
+app_layer: ApplicationLayer = None
 
 
-def setup_service(application_layer: UnitApplication):
+def setup_service(application_layer: ApplicationLayer):
     """
     Configura la capa de aplicación que se utilizará dentro de este router.
     Este patrón permite una fácil inyección de dependencias.
@@ -29,7 +29,7 @@ def setup_service(application_layer: UnitApplication):
     print("Application layer injected", app_layer)
     return app_layer
 
-@router.post("/", response_model=int)
+@router.post("", response_model=int)
 async def Create(data: C, db: Session = Depends(GetSession)) -> int:
     """
     Create a new unit of measurement.
@@ -50,7 +50,7 @@ async def Get(id: int, db: Session = Depends(GetSession)) -> E | None:
     """
     return app_layer.Get(id, db)
 
-@router.put("/", response_model=bool)
+@router.put("", response_model=bool)
 async def Update(data: U, db: Session = Depends(GetSession)) -> bool:
     """
     Update an existing unit of measurement.

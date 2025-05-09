@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.health.infrastructure.database.base import SchemaHealth
-from app.config.db import Base
+from app.health.infrastructure.database.schema import SchemaHealth
+from app.config.db import BaseModel
 
-class MeasureType(Base):
+class MeasureType(BaseModel):
     __tablename__ = SchemaHealth('measure_type')
 
     id = Column(Integer, primary_key=True, autoincrement=True)
