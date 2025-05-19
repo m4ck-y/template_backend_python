@@ -4,7 +4,7 @@ from app.config.db import datetime_now
 from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 
-from app.utils.infrastructure.base_model import BaseModel as TableBaseModel
+from app.utils.infrastructure.database.base_model import BaseModel as TableBaseModel
 
 from app.utils.domain.repository.db import IRepository
 from app.utils.domain.repository.base import GetSession

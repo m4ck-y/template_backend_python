@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.health.infrastructure.database.schema import SchemaHealth
-from app.utils.infrastructure.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModel
 
 class MeasureType(BaseModel):
     __tablename__ = SchemaHealth('measure_type')

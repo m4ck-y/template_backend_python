@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
-from app.utils.infrastructure.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.domain.enum.gender import EGenderIdentity
 from app.utils.enum.verification_status import EVerificationStatus
 

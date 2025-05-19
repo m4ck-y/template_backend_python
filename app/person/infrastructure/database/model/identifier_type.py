@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.domain.enum.identifier import EIdentifierType
 from app.person.infrastructure.database.schema import SchemaPerson
 

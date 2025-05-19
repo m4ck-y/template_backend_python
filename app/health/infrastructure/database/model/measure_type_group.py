@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModel
 from ..schema import SchemaHealth
 
 class MeasureTypeGroup(BaseModel):

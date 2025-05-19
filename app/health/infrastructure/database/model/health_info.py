@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModel
 from app.health.domain.enum.biological_sex import EBiologicalSex
 from app.health.domain.enum.blood_type import EBloodType
 
