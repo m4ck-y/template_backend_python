@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List, Optional
-from app.utils.domain.repository.base import Session  # Solo se usa como tipado
+from app.utils.domain.repository.base import TSession  # Solo se usa como tipado
 
 # Tipos genéricos para la entidad principal y sus esquemas de creación y actualización
 E = TypeVar('SchemaEntity')         # Ejemplo: CountryFlag
@@ -22,13 +22,13 @@ class IRepository(ABC, Generic[E, C, U]):
     """
 
     @abstractmethod
-    def Create(self, value: C, session: Session) -> int:
+    def Create(self, value: C, session: TSession) -> int:
         """
         Crea una nueva entidad en la base de datos.
 
         Args:
             value (C): Esquema de creación de la entidad.
-            session (Session): Sesión activa de base de datos.
+            session (TSession): Sesión activa de base de datos.
 
         Returns:
             int: ID de la entidad recién creada.
@@ -36,13 +36,13 @@ class IRepository(ABC, Generic[E, C, U]):
         raise NotImplementedError
 
     @abstractmethod
-    def Get(self, id: int, session: Session) -> Optional[E]:
+    def Get(self, id: int, session: TSession) -> Optional[E]:
         """
         Recupera una entidad por su ID.
 
         Args:
             id (int): Identificador único de la entidad.
-            session (Session): Sesión activa de base de datos.
+            session (TSession): Sesión activa de base de datos.
 
         Returns:
             Optional[E]: Entidad encontrada o None si no existe.
@@ -50,12 +50,12 @@ class IRepository(ABC, Generic[E, C, U]):
         raise NotImplementedError
 
     @abstractmethod
-    def List(self, session: Session) -> List[E]:
+    def List(self, session: TSession) -> List[E]:
         """
         Lista todas las entidades disponibles en la base de datos.
 
         Args:
-            session (Session): Sesión activa de base de datos.
+            session (TSession): Sesión activa de base de datos.
 
         Returns:
             List[E]: Lista completa de entidades.
@@ -63,13 +63,13 @@ class IRepository(ABC, Generic[E, C, U]):
         raise NotImplementedError
 
     @abstractmethod
-    def Update(self, value: U, session: Session) -> bool:
+    def Update(self, value: U, session: TSession) -> bool:
         """
         Actualiza una entidad existente.
 
         Args:
             value (U): Esquema con los campos a actualizar.
-            session (Session): Sesión activa de base de datos.
+            session (TSession): Sesión activa de base de datos.
 
         Returns:
             bool: True si la actualización fue exitosa, False si la entidad no fue encontrada.
@@ -77,13 +77,13 @@ class IRepository(ABC, Generic[E, C, U]):
         raise NotImplementedError
 
     @abstractmethod
-    def Delete(self, id: int, session: Session) -> bool:
+    def Delete(self, id: int, session: TSession) -> bool:
         """
         Elimina una entidad por su ID.
 
         Args:
             id (int): Identificador único de la entidad a eliminar.
-            session (Session): Sesión activa de base de datos.
+            session (TSession): Sesión activa de base de datos.
 
         Returns:
             bool: True si la eliminación fue exitosa, False si no se encontró la entidad.

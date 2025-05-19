@@ -1,12 +1,11 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 from ..schema import SchemaHealth
 
 class Unit(BaseModel):
     __tablename__ = SchemaHealth('unit') # Nombre de la tabla
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), unique=True, nullable=False)  # Nombre de la unidad (ej. kg, m, °C)
     symbol = Column(String(10))  # Símbolo de la unidad
 

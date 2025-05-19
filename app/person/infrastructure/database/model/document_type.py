@@ -1,12 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 from app.person.infrastructure.database.schema import SchemaPerson
 
 class DocumentType(BaseModel):
     __tablename__ = SchemaPerson('document_type')
 
-    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
 
     id_category = Column(Integer, ForeignKey(f'{SchemaPerson("document_category")}.id'), nullable=False)

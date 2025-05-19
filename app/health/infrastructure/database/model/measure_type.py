@@ -1,12 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.health.infrastructure.database.schema import SchemaHealth
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 
 class MeasureType(BaseModel):
     __tablename__ = SchemaHealth('measure_type')
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)  # Nombre del tipo de medición
 
     id_unit = Column(Integer, ForeignKey(f'{SchemaHealth("unit")}.id'), nullable=False)  # Relación con la unidad

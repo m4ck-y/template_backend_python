@@ -1,13 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 from app.person.infrastructure.database.schema import SchemaPerson
 
 class PersonIdentifier(BaseModel):
 
     __tablename__ = SchemaPerson('person_identifier')
-
-    id = Column(Integer, primary_key=True)
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 person_identifier -> 1 person

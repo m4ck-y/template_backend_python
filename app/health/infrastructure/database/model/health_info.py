@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Enum, ForeignKey
 from sqlalchemy.orm import relationship
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 from app.health.domain.enum.biological_sex import EBiologicalSex
 from app.health.domain.enum.blood_type import EBloodType
 
@@ -8,8 +8,6 @@ from ..schema import SchemaHealth
 
 class HealthInfo(BaseModel):
     __tablename__ = SchemaHealth('health_info')
-
-    id = Column(Integer, primary_key=True)
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 person -> 1 health_info

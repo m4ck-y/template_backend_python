@@ -9,6 +9,8 @@ from app.health.domain.schemas.unit import (
     SchemaUpdateUnit as U,
 )
 
+from app.utils.infrastructure.base_implementation import BaseRepository
+
 class UnitRepository(IRepository):
 
     def Create(self, entity: C, db: Session) -> int:

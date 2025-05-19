@@ -1,12 +1,10 @@
 from sqlalchemy import Column, Integer, ForeignKey, Float, Text, DateTime
 from sqlalchemy.orm import relationship
-from app.config.db import BaseModel
+from app.utils.infrastructure.base_model import BaseModel
 from ..schema import SchemaHealth
 
 class Measurement(BaseModel):
     __tablename__ = SchemaHealth('measurement')  # Nombre de la tabla
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
     
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 Measurement -> 1 Person
