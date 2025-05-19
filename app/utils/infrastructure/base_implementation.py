@@ -52,12 +52,13 @@ class BaseRepository(IRepository, Generic[ModelType, CreateSchemaType, UpdateSch
             db.add(new_entity)
             db.commit()
             db.refresh(new_entity)
-            return new_entity.id  # Devuelve el ID de la entidad recién creada
+            return new_entity.id
+
         except IntegrityError as e:
             # Manejo de excepciones en caso de errores de integridad (por ejemplo, unicidad)
             db.rollback()  # Revertir cambios en caso de error
             print(f"Error de unicidad: {e.orig}")
-            return None  # Retorna None si no se pudo crear la entidad
+            return None
 
     def Get(self, id: int, db: Session) -> Optional[ReturnSchemaType]:
         """
@@ -74,7 +75,7 @@ class BaseRepository(IRepository, Generic[ModelType, CreateSchemaType, UpdateSch
         record = db.query(self.model).filter(self.model.id == id, self.model.deleted_at.is_(None)).first()
         if record:
             # Si la entidad existe, se devuelve utilizando el esquema de respuesta
-            return self.return_schema.from_orm(record)
+            return self.return_schema.model_validate(record)
         return None  # Si no se encuentra la entidad, se retorna None
 
     def List(self, db: Session) -> List[ReturnSchemaType]:
@@ -90,7 +91,7 @@ class BaseRepository(IRepository, Generic[ModelType, CreateSchemaType, UpdateSch
         # Se obtiene la lista de todas las entidades no eliminadas
         records = db.query(self.model).filter(self.model.deleted_at.is_(None)).all()
         # Se transforma cada entidad utilizando el esquema de respuesta
-        return [self.return_schema.from_orm(unit) for unit in records]
+        return [self.return_schema.model_validate(unit) for unit in records]
 
     def Update(self, value: UpdateSchemaType, db: Session) -> bool:
         """
@@ -108,7 +109,7 @@ class BaseRepository(IRepository, Generic[ModelType, CreateSchemaType, UpdateSch
         if not record:
             return False  # Si no se encuentra la entidad, se retorna False
         # Se actualizan los atributos de la entidad con los valores proporcionados
-        for k, v in value.dict(exclude_unset=True).items():
+        for k, v in value.model_dump(exclude_unset=True).items():
             setattr(record, k, v)
         db.commit()  # Se guarda la entidad actualizada
         db.refresh(record)  # Se refresca para obtener los cambios recientes
