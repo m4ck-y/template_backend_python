@@ -8,4 +8,4 @@ def setup(api_server: FastAPI):
     print("setup >>> health_info")
     repo = LayerRepository()
     app = LayerApplication(repo)
-    LayerService(api_server,app)
+    LayerService(api_server,app, "health")

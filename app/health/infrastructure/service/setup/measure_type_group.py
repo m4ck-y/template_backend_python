@@ -8,4 +8,4 @@ def setup(api_server: FastAPI):
     print("setup >>> measure_type_group")
     repo = LayerRepository()
     app = LayerApplication(repo)
-    LayerService(api_server,app)
+    LayerService(api_server,app, "health")

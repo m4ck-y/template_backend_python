@@ -42,10 +42,15 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
             schema_create: CreateSchemaType,
             schema_update: UpdateSchemaType, 
             schema_return: ReturnSchemaType,
-            route_name: str):
+            route_name: str, route_parent: str = None):
+        
+
+        route_name = f"{route_parent}/{route_name}" if route_parent else route_name
+
+        tags = [route_parent, route_name] if route_parent else [route_name]
         
         # Configura el router para el recurso
-        self.api_router = APIRouter(prefix=f"/{route_name}", tags=[route_name])
+        self.api_router = APIRouter(prefix=f"/{route_name}", tags=tags)
         # Capa de aplicación que maneja operaciones CRUD
         self.application_layer = application_layer
         self.schema_create = schema_create

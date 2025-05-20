@@ -11,5 +11,4 @@ ROUTE_NAME = "measure_type"
 
 class ServiceMeasureType(BaseLayerService[E, C, U]):
     def __init__(self, router: APIRouter, app_layer: BaseLayerApplication, route_parent: str = None):
-        route_name = f"{route_parent}/{ROUTE_NAME}" if route_parent else ROUTE_NAME
-        super().__init__(router, app_layer, C, U, E, route_name)
+        super().__init__(router, app_layer, C, U, E, ROUTE_NAME, route_parent)
