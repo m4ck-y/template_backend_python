@@ -6,7 +6,7 @@ from app.health.domain.schemas.measurement import (
     SchemaUpdateMeasurement as U,
 )
 
-class MeasurementGroupRepository(BaseRepository[Table, C, U, E]):
+class MeasurementRepository(BaseRepository[Table, C, U, E]):
 
     def __init__(self):
         super().__init__(Table, C, U, E)
