@@ -5,9 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 
 from app.utils.infrastructure.database.base_model import BaseModel as TableBaseModel
-
-from app.utils.domain.repository.db import IRepository
-from app.utils.domain.repository.base import GetSession
+from app.utils.domain.repository.base_repository import IBaseRepository
 
 # Tipos genéricos para los modelos, esquemas y la respuesta
 ModelType = TypeVar("ModelType", bound=TableBaseModel)  # Representa el modelo de SQLAlchemy
@@ -15,7 +13,7 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)  # Esquema para 
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)  # Esquema para la actualización de entidades
 ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)  # Esquema para la respuesta que se devolverá
 
-class BaseRepository(IRepository, Generic[ModelType, CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
+class BaseRepository(IBaseRepository, Generic[ModelType, CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
     """
     Clase base para realizar operaciones CRUD estándar en cualquier entidad que herede esta clase.
     """

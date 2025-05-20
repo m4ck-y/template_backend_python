@@ -1,14 +1,20 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List, Optional
-from app.utils.domain.repository.base import TSession  # Solo se usa como tipado
+from app.utils.domain.repository.base_session import TSession  # Solo se usa como tipado
 
 # Tipos genéricos para la entidad principal y sus esquemas de creación y actualización
 E = TypeVar('SchemaEntity')         # Ejemplo: CountryFlag
 C = TypeVar('SchemaEntityCreate')   # Ejemplo: CountryFlagCreate
 U = TypeVar('SchemaEntityUpdate')   # Ejemplo: CountryFlagUpdate
 
-class IRepository(ABC, Generic[E, C, U]):
+class IBaseRepository(ABC, Generic[E, C, U]):
     """
+     The generic types used in this interface are as follows:
+     
+    - E: The entity type (e.g., SchemaUnit).
+    - C: The creation schema for the entity (e.g., SchemaCreateUnit).
+    - U: The update schema for the entity (e.g., SchemaUpdateUnit).
+
     Interfaz genérica de repositorio para operaciones CRUD sobre cualquier entidad del dominio.
 
     Esta interfaz define los contratos base que deben implementar los repositorios específicos

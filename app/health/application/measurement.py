@@ -1,5 +1,5 @@
 from typing import List
-from app.utils.domain.repository.base import TSession
+from app.utils.domain.repository.base_session import TSession
 from app.health.domain.repository.measurement import IRepositoryMeasurement as IRepository
 from app.health.domain.schemas.measurement import (
     SchemaMeasurement as E,
