@@ -10,7 +10,6 @@ CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)
 
-
 class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
 
     """

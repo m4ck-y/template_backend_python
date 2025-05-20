@@ -3,10 +3,14 @@ from app.utils.domain.repository.base_session import TSession
 from app.utils.domain.repository.base_repository import IBaseRepository
 from pydantic import BaseModel
 
+from app.utils.enum.str_color import StrColor
+
 # Definimos los tipos genéricos para las entidades y esquemas
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)
+
+str_color = StrColor()
 
 class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
     """
@@ -33,6 +37,14 @@ class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSch
             Este repositorio debe implementar operaciones CRUD genéricas (crear, obtener, listar, actualizar y eliminar).
         """
         self.repository = repository  # El repositorio inyectado que maneja las operaciones de base de datos
+
+        print(
+                "\t",
+                str_color.CYAN("BaseLayerApplication >>> __init__")\
+                .GREEN(", repo:").RESET("\n\t")\
+                .YELLOW(str(type(self.repository)))\
+                .RESET("\n\t")\
+                .RED(str(self.repository)))
 
     def Create(self, value: CreateSchemaType, db: TSession) -> int:
         """
@@ -96,4 +108,5 @@ class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSch
         Returns:
             bool: True si la entidad fue eliminada correctamente, False si no se encontró.
         """
+        print(str_color.MAGENTA("BaseLayerApplication >>> Delete"), ", repo:", type(self.repository), self.repository)
         return self.repository.Delete(id, db)

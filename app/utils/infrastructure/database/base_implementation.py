@@ -1,9 +1,11 @@
 from typing import TypeVar, Generic, Optional, List
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from app.config.db import datetime_now
 from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 
+from app.utils.enum.str_color import StrColor
 from app.utils.infrastructure.database.base_model import BaseModel as TableBaseModel
 from app.utils.domain.repository.base_repository import IBaseRepository
 
@@ -12,6 +14,8 @@ ModelType = TypeVar("ModelType", bound=TableBaseModel)  # Representa el modelo d
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)  # Esquema para la creación de entidades
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)  # Esquema para la actualización de entidades
 ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)  # Esquema para la respuesta que se devolverá
+
+str_color = StrColor()
 
 class BaseRepository(IBaseRepository, Generic[ModelType, CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
     """
@@ -125,7 +129,9 @@ class BaseRepository(IBaseRepository, Generic[ModelType, CreateSchemaType, Updat
             bool: True si la eliminación fue exitosa, False si no se encontró la entidad.
         """
         # Se busca la entidad por ID asegurándose de que no haya sido eliminada
-        record = db.query(self.model).filter(self.model.id == id, self.model.deleted_at.is_(None)).first()
+        record = db.query(self.model).filter(and_(self.model.id == id, self.model.deleted_at.is_(None))).first()
+        print(str_color.RED(">>>> Model"), type(self.model), self.model)
+        print(str_color.YELLOW(">>>>"), record)
         if not record:
             return False  # Si no se encuentra la entidad, se retorna False
         # Se marca la entidad como eliminada (soft delete) sin borrarla realmente
