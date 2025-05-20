@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List
 
 from app.utils.domain.repository.base_session import TSession  # Tipado para la sesión de base de datos
 from app.health.domain.schemas.unit import (
