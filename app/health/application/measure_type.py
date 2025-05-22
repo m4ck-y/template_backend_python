@@ -1,7 +1,7 @@
 from app.utils.application.base import BaseLayerApplication
 from app.health.domain.repository.measure_type import IRepositoryMeasureType as IRepository
 from app.health.domain.schemas.measure_type import (
-    SchemaMeasureType as E,
+    SchemaListItemMeasureType as E,
     SchemaCreateMeasureType as C,
     SchemaUpdateMeasureType as U,
 )

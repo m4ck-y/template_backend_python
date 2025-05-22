@@ -1,3 +1,4 @@
+from app.health.domain.schemas.measure_type_group import SchemaMeasureTypeGroup
 from app.utils.domain.schemas.basemodel import ORMModel
 from pydantic import Field
 
@@ -11,5 +12,9 @@ class SchemaCreateMeasureType(SchemaBaseMeasureType):
 class SchemaUpdateMeasureType(SchemaBaseMeasureType):
     id: int
 
-class SchemaMeasureType(SchemaUpdateMeasureType):
+
+class SchemaMeasureType(SchemaBaseMeasureType):
+    list_measure_type_group: list[SchemaUpdateMeasureType]
+
+class SchemaListItemMeasureType(SchemaUpdateMeasureType):
     id: int

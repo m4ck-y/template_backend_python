@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.health.domain.schemas.measure_type import (
-    SchemaMeasureType as E,
+    SchemaListItemMeasureType as E,
     SchemaCreateMeasureType as C,
     SchemaUpdateMeasureType as U,
 )

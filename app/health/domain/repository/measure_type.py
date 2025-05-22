@@ -1,7 +1,7 @@
 from abc import ABC
 from app.utils.domain.repository.base_repository import IBaseRepository
 from app.health.domain.schemas.measure_type import (
-    SchemaMeasureType as E,
+    SchemaListItemMeasureType as E,
     SchemaCreateMeasureType as C,
     SchemaUpdateMeasureType as U,
 )
