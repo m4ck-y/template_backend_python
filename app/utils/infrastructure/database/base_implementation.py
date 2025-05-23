@@ -147,9 +147,10 @@ class BaseRepository(IBaseRepository, Generic[ModelType, CreateSchemaType, Updat
             self.model.deleted_at.is_(None)).all()
         
         #columns of record
-        record_structure = json.dumps(records[0].__dict__, default=str, indent=4)
-        print(str_color.GREEN("\t>>>> column_list_models"), self.column_list_models)
-        print("\t", str_color.MAGENTA(self.model.__name__).YELLOW(" Record Structure: ").RESET(record_structure).CYAN(str(self.return_schema)))
+        if len(records) > 0:
+            record_structure = json.dumps(records[0].__dict__, default=str, indent=4)
+            print(str_color.GREEN("\t>>>> column_list_models"), self.column_list_models)
+            print("\t", str_color.MAGENTA(self.model.__name__).YELLOW(" Record Structure: ").RESET(record_structure).CYAN(str(self.return_schema)))
 
 
         # Se transforma cada entidad utilizando el esquema de respuesta

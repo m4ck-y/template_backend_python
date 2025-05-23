@@ -7,7 +7,7 @@ from pydantic import Field
 
 class SchemaPersonBase(ORMModel):
     #verification_status: EVerificationStatus
-    url_photo: str = Field(..., examples=["profile.jpg"])
+    #url_photo: str = Field(..., examples=["profile.jpg"])#TODO: Service Update Photo
     first_name: str = Field(..., examples=["John"])
     last_name: str = Field(..., examples=["Doe"])
     second_last_name: str = Field(..., examples=["Doe"])
@@ -23,5 +23,6 @@ class SchemaPersonUpdate(SchemaPersonBase):
 
 
 
-class SchemaPerson(SchemaPersonBase):
+class SchemaPerson(SchemaPersonUpdate):
+    url_photo: Optional[str] = Field(..., examples=["profile.jpg"])
     birth_info: Union[SchemaBirthInfo, int, None]
