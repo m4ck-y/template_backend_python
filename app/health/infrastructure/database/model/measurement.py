@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey, Float, Text, DateTime
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.base_model import BaseModelTimeSeries
 from ..schema import SchemaHealth
 
-class Measurement(BaseModel):
+class Measurement(BaseModelTimeSeries):
     __tablename__ = SchemaHealth('measurement')  # Nombre de la tabla
     
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)

@@ -58,3 +58,19 @@ class BaseModel(Base):
     #created_by_id_employee_role = Column(Integer, ForeignKey('employee_role.id_employee_role'), nullable=True)  # FK a `employee_role`
     #updated_by_id_employee_role = Column(Integer, ForeignKey('employee_role.id_employee_role'), nullable=True)
     #deleted_by_id_employee_role = Column(Integer, ForeignKey('employee_role.id_employee_role'), nullable=True)
+
+
+class BaseModelTimeSeries(BaseModel):
+    """
+    Clase base para modelos de series temporales.
+
+    Esta clase hereda de `BaseModel` y añade un campo adicional `event_at` que representa 
+    la fecha y hora real del evento, no la fecha de creación del registro.
+    """
+    
+    __abstract__ = True  # Asegura que no se cree una tabla para esta clase base, solo para las clases que hereden de ella.
+
+    event_at = Column(DateTime, default=datetime_now, nullable=False)
+    """
+    Fecha y hora real del evento. Este campo es obligatorio y se establece automáticamente al momento de la creación.
+    """

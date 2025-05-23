@@ -21,6 +21,12 @@ class ORMModel(BaseModel):
     y serialización.
     """
 
+class ORMTimeSeries(ORMModel):
+    """
+    Base para cualquier evento con marca de tiempo.
+    """
+    event_at: datetime  # Fecha y hora real del evento (no cuándo fue creado el registro)
+
 class AuditModel(ORMModel):
 
     """
@@ -32,7 +38,7 @@ class AuditModel(ORMModel):
     - `updated_by_id_employee_role`: ID del usuario o rol que actualizó el registro.
     - `deleted_by_id_employee_role`: ID del usuario o rol que eliminó el registro."""
 
-    created_at: datetime
+    created_at: datetime = None
     """
     📄 Descripción:
     Fecha y hora en que el registro fue creado. Este campo es obligatorio y se establece 
@@ -42,7 +48,7 @@ class AuditModel(ORMModel):
     2025-05-09T12:00:00Z
     """
 
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
     """
     📄 Descripción:
     Fecha y hora de la última actualización del registro. Este campo se actualiza automáticamente 
@@ -91,3 +97,9 @@ class AuditModel(ORMModel):
     🧩 Ejemplo:
     103 (ID de un rol de empleado)
     """
+
+class AuditModelWithTimeSeries(AuditModel, ORMTimeSeries):
+    """
+    Modelo de auditoría que incluye una serie temporal.
+    """
+    pass

@@ -1,11 +1,12 @@
-from app.utils.domain.schemas.basemodel import ORMModel
+from typing import Optional
+from app.utils.domain.schemas.basemodel import ORMTimeSeries
 from pydantic import Field
 
-class SchemaBaseMeasurement(ORMModel):
+class SchemaBaseMeasurement(ORMTimeSeries):
     id_person: int
     id_measure_type: int
     value: float
-    notes: str
+    notes: Optional[str] = None
 
 class SchemaCreateMeasurement(SchemaBaseMeasurement):
     pass
@@ -13,5 +14,5 @@ class SchemaCreateMeasurement(SchemaBaseMeasurement):
 class SchemaUpdateMeasurement(SchemaBaseMeasurement):
     id: int
 
-class SchemaMeasurement(SchemaBaseMeasurement):
+class SchemaMeasurement(SchemaUpdateMeasurement):
     pass
