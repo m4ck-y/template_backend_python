@@ -7,7 +7,9 @@ from app.person.domain.enum.civil_status import ECivilStatus
 from app.person.domain.enum.curp_sex import CURPSex
 
 class LegalInfo(BaseModel):
-    __tablename__ = SchemaPerson('legal_info')
+    __tablename__ = 'legal_info'
+
+    __table_args__ = {'schema': 'person'}
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     type_national_id_sex = Column(Enum(CURPSex), nullable=False)

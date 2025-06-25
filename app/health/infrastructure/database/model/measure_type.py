@@ -4,7 +4,9 @@ from app.health.infrastructure.database.schema import SchemaHealth
 from app.utils.infrastructure.database.base_model import BaseModel
 
 class MeasureType(BaseModel):
-    __tablename__ = SchemaHealth('measure_type')
+    __tablename__ = 'measure_type'
+
+    __table_args__ = {'schema': 'health'}
 
     name = Column(String(100), nullable=False)  # Nombre del tipo de medición
 

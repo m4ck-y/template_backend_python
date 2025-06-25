@@ -4,7 +4,9 @@ from app.utils.infrastructure.database.base_model import BaseModel
 from ..schema import SchemaHealth
 
 class Unit(BaseModel):
-    __tablename__ = SchemaHealth('unit') # Nombre de la tabla
+    __tablename__ = 'unit' # Nombre de la tabla
+
+    __table_args__ = {'schema': 'health'}
 
     name = Column(String(50), unique=True, nullable=False)  # Nombre de la unidad (ej. kg, m, °C)
     symbol = Column(String(10))  # Símbolo de la unidad

@@ -5,7 +5,9 @@ from app.person.infrastructure.database.schema import SchemaPerson
 
 class DocumentCategory(BaseModel):
 
-    __tablename__ = SchemaPerson('document_category')
+    __tablename__ = 'document_category'
+
+    __table_args__ = {'schema': 'person'}
 
     name = Column(String, nullable=False)
 

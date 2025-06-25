@@ -10,4 +10,5 @@ def SchemaHealth(name: str) -> str:
     if is_db_postgres():
         return f"health.{name.lower()}"  # En PostgreSQL, la tabla está en el esquema 'health'.
     else:
-        return f"health_{name.lower()}"  # En SQLite, la tabla tiene el prefijo 'health_'.
+        #return f"health_{name.lower()}"  # En SQLite, la tabla tiene el prefijo 'health_'.
+        return ""

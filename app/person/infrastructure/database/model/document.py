@@ -5,7 +5,9 @@ from app.person.infrastructure.database.schema import SchemaPerson
 
 class Document(BaseModel):
 
-    __tablename__ = SchemaPerson('document')
+    __tablename__ = 'document'
+
+    __table_args__ = {'schema': 'person'}
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 document -> 1 person

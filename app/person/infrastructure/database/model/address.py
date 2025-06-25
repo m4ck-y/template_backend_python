@@ -5,7 +5,11 @@ from app.person.domain.enum.contact_type import EAddressType
 from app.person.infrastructure.database.schema import SchemaPerson
 
 class Address(BaseModel):
-    __tablename__ = SchemaPerson('address')
+    __tablename__ = 'address'
+
+    __table_args__ = {'schema': 'person'}
+
+    
 
     id_person = Column(Integer, ForeignKey('person.id'))
     # 1 address -> 1 person

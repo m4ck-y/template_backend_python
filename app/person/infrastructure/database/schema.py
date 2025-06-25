@@ -10,4 +10,5 @@ def SchemaPerson(name: str) -> str:
     if is_db_postgres():
         return f"person.{name.lower()}"  # En PostgreSQL, la tabla está en el esquema 'person'.
     else:
-        return f"person_{name.lower()}"  # En SQLite, la tabla tiene el prefijo 'person_'.
+        #return f"person_{name.lower()}"  # En SQLite, la tabla tiene el prefijo 'person_'.
+        return ""

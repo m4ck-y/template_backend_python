@@ -7,7 +7,9 @@ from app.health.domain.enum.blood_type import EBloodType
 from ..schema import SchemaHealth
 
 class HealthInfo(BaseModel):
-    __tablename__ = SchemaHealth('health_info')
+    __tablename__ = 'health_info'
+
+    __table_args__ = {'schema': 'health'}
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 person -> 1 health_info

@@ -4,7 +4,9 @@ from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.infrastructure.database.schema import SchemaPerson
 
 class DocumentType(BaseModel):
-    __tablename__ = SchemaPerson('document_type')
+    __tablename__ = 'document_type'
+
+    __table_args__ = {'schema': 'person'}
 
     name = Column(String, nullable=False)
 

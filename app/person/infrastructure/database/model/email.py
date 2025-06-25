@@ -7,7 +7,8 @@ from app.person.infrastructure.database.schema import SchemaPerson
 
 
 class Email(BaseModel):
-    __tablename__ = SchemaPerson("email")
+    __tablename__ = "email"
+    __table_args__ = {'schema': 'person'}
 
     id_person = Column(Integer, ForeignKey("person.id"))
     # 1 email -> 1 person

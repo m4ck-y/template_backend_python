@@ -4,7 +4,9 @@ from app.utils.infrastructure.database.base_model import BaseModelTimeSeries
 from ..schema import SchemaHealth
 
 class Measurement(BaseModelTimeSeries):
-    __tablename__ = SchemaHealth('measurement')  # Nombre de la tabla
+    __tablename__ = 'measurement'  # Nombre de la tabla
+
+    __table_args__ = {'schema': 'health'}
     
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     # 1 Measurement -> 1 Person

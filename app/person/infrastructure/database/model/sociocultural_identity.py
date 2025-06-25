@@ -7,7 +7,9 @@ from app.person.domain.enum.answer import EAnswerGeneral, EAnswerMigrant
 from ..schema import SchemaPerson
 
 class SocioculturalIdentity(BaseModel):
-    __tablename__ = SchemaPerson('sociocultural_identity')
+    __tablename__ = 'sociocultural_identity'
+
+    __table_args__ = {'schema': 'person'}
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     person = relationship("Person", back_populates="sociocultural_identity")

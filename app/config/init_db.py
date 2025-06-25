@@ -1,8 +1,13 @@
 from app.person.infrastructure.database.init import init as init_person
 from app.health.infrastructure.database.init import init as init_health, Seeder as SeederHealth
-from app.config.db import Base, engine
+from app.config.db import Base, engine, is_db_postgres, CreateSchema
 
 def init_db():
+
+    if is_db_postgres():
+        CreateSchema("person", "health")
+
+
 
     print("init >>> db ... ") 
     init_person()

@@ -5,7 +5,9 @@ from app.person.infrastructure.database.schema import SchemaPerson
 
 class DocumentIdentifier(BaseModel):
 
-    __tablename__ = SchemaPerson('document_identifier')
+    __tablename__ = 'document_identifier'
+
+    __table_args__ = {'schema': 'person'}
 
     id_person_identifier = Column(Integer, ForeignKey(f'{SchemaPerson("person_identifier")}.id'), nullable=False)
     person_identifier = relationship("PersonIdentifier", back_populates="document_identifier")

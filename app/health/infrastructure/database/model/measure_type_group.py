@@ -4,7 +4,9 @@ from app.utils.infrastructure.database.base_model import BaseModel
 from ..schema import SchemaHealth
 
 class MeasureTypeGroup(BaseModel):
-    __tablename__ = SchemaHealth('measure_type_group')  # Nombre de la tabla
+    __tablename__ = 'measure_type_group'  # Nombre de la tabla
+
+    __table_args__ = {'schema': 'health'}
 
     id_measure_type = Column(Integer, ForeignKey(f'{SchemaHealth("measure_type")}.id'))
     # 1 measure_type_group -> 1 measure_type
