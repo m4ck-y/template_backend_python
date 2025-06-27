@@ -11,7 +11,7 @@ class MeasureType(BaseModel):
     name = Column(String(100), nullable=False)  # Nombre del tipo de medición
 
     id_unit = Column(Integer, ForeignKey(f'{SchemaHealth("unit")}.id'), nullable=False)  # Relación con la unidad
-    # 1 measure_type -> 1 unit
+    # 1:1 | 1 measure_type -> 1 unit
     unit = relationship('Unit', back_populates='list_measure_types')
 
     #RELATIONSHIPS
