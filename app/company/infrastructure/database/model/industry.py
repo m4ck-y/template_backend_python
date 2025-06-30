@@ -42,5 +42,8 @@ class Industry(BaseModel):
     # 1:N | 1 industry -> n companies
     list_companies = relationship("Company", back_populates="industry")
 
+    # 1:N | 1 industry -> n type_services
+    list_type_services = relationship("TypeService", back_populates="industry")
+
 
     #TODO:  NAICS/INEGI en México., https://www.inegi.org.mx/scian/
