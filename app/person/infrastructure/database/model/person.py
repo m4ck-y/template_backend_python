@@ -46,6 +46,11 @@ class Person(BaseModel):
     list_measurements = relationship("Measurement", back_populates="person")
 
 
+    # ACCOUNT
+    # 1:1 | 1 person -> 1 user
+    user = relationship("User", back_populates="person", uselist=False)
+
+
 
 
     #user = relationship("User", back_populates="person", uselist=False)
