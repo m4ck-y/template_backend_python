@@ -3,6 +3,7 @@ from app.health.infrastructure.database.init import init as init_health, Seeder 
 from app.company.infrastructure.database.init import init as init_company, Seeder as SeederCompany
 from app.health_facility.infrastructure.database.init import init as init_health_facility, Seeder as SeederHealthFacility
 from app.account.infrastructure.database.init import init as init_account
+from app.security.infrastructure.database.init import init as init_security
 
 from app.config.db import Base, engine, is_db_postgres, CreateSchema
 
@@ -19,6 +20,7 @@ def init_db():
     init_company()
     init_health_facility()
     init_account()
+    init_security()
     Base.metadata.create_all(bind=engine)
 
     SeederHealth()
