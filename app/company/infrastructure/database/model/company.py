@@ -36,3 +36,6 @@ class Company(BaseModel):
     # RELATIONSHIP
     # 1:1 | 1 company -> 1 location
     location = relationship("Location", uselist=False, back_populates="company")
+
+    # 1:N | 1 company -> N employees
+    list_employees = relationship("Employee", back_populates="company")
