@@ -4,8 +4,6 @@ from app.company.infrastructure.database.model.industry import Industry
 from app.company.infrastructure.database.model.company import Company
 from app.company.infrastructure.database.model.type_service import TypeService
 from app.company.infrastructure.database.model.location import Location
-from app.company.infrastructure.database.model.employee import Employee
-from app.company.infrastructure.database.model.employee_mexican import EmployeeMexican
 from app.config.db import Session, engine, TSession
 
 def init():

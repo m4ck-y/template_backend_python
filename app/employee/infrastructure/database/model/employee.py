@@ -1,8 +1,9 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Enum as SqlEnum, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Enum as SqlEnum, Float, Table
 from sqlalchemy.orm import relationship
 
 from app.utils.infrastructure.database.base_model import BaseModel
-from ..schema import SchemaCompany
+from ..schema import SchemaEmployee
+from app.security.infrastructure.database.schema import SchemaSecurity
 
 from enum import Enum
 
@@ -26,11 +27,19 @@ class EStatusEmployee(Enum):
     TERMINATED = 5
     "DE BAJA"
 
+
+roles_employee = Table(
+    "roles_employee",
+    BaseModel.metadata,
+    Column("id_employee", ForeignKey('employee.id'), nullable=False),
+    Column("id_role", ForeignKey(f"{SchemaSecurity('role')}.id"), nullable=False),
+    schema="employee",
+)
+
+
 class Employee(BaseModel):
 
     __tablename__ = "employee"
-
-    __table_args__ = {'schema': 'company'}
 
     id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
     person = relationship("Person", back_populates="list_employments")
