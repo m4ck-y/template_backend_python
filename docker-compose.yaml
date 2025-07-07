@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17.5
+    container_name: postgres_template_hostpital_digital
+    ports:
+      - ${DB_POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DB_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DB_POSTGRES_PASS}
+      POSTGRES_DB: ${DB_POSTGRES_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: no
+volumes:
+  pgdata:
