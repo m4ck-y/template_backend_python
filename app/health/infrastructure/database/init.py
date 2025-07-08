@@ -301,9 +301,10 @@ def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session:
     measure_type_axillary_temperature = MeasureType(name="Axilar", id_unit=unit_celsius.id)
     measure_type_inguinal_temperature = MeasureType(name="Inguinal", id_unit=unit_celsius.id)
     measure_type_anal_temperature = MeasureType(name="Anal", id_unit=unit_celsius.id)
+    measure_type_infrarrojo = MeasureType("Infrarrojo", id_unit=unit_celsius.id)
 
     # Agregar los tipos de medición para 'Temperatura'
-    session.add_all([measure_type_buccal_temperature, measure_type_axillary_temperature, measure_type_inguinal_temperature, measure_type_anal_temperature])
+    session.add_all([measure_type_buccal_temperature, measure_type_axillary_temperature, measure_type_inguinal_temperature, measure_type_anal_temperature, measure_type_infrarrojo])
     session.commit()
     print("Tipos de medición para 'Temperatura' insertados correctamente.")
 
@@ -312,13 +313,15 @@ def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session:
     session.refresh(measure_type_axillary_temperature)
     session.refresh(measure_type_inguinal_temperature)
     session.refresh(measure_type_anal_temperature)
+    session.refresh(measure_type_infrarrojo)
 
     # Crear relaciones entre los tipos de medición y el grupo 'Temperatura'
     session.add_all([
         MeasureTypeGroup(measure_type=measure_type_buccal_temperature, id_measure_group=measure_group_temperature.id),
         MeasureTypeGroup(measure_type=measure_type_axillary_temperature, id_measure_group=measure_group_temperature.id),
         MeasureTypeGroup(measure_type=measure_type_inguinal_temperature, id_measure_group=measure_group_temperature.id),
-        MeasureTypeGroup(measure_type=measure_type_anal_temperature, id_measure_group=measure_group_temperature.id)
+        MeasureTypeGroup(measure_type=measure_type_anal_temperature, id_measure_group=measure_group_temperature.id),
+        MeasureTypeGroup(measure_type=measure_type_infrarrojo, id_measure_group=measure_group_temperature.id)
     ])
     session.commit()
     print("Relaciones entre tipos de medición y grupo 'Temperatura' insertadas correctamente.")
