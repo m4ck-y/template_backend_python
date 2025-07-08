@@ -98,6 +98,7 @@ unit_liter: Unit = None
 unit_second: Unit = None
 unit_ampere: Unit = None
 unit_mmHg: Unit = None
+unit_spo2: Unit = None
 
 
 
@@ -113,6 +114,7 @@ def seeder_units(session:TSession):
     unit_second = Unit(name="Second", symbol="s")
     unit_ampere = Unit(name="Ampere", symbol="A")
     unit_mmHg = Unit(name="Millimeters of Mercury", symbol="mmHg")  # Para la presión arterial
+    unit_spo2 = Unit(name="Saturacion periferica de Oxigeno", symbol="spo2")
 
 
     # Agregar las unidades si no existen en la base de datos
@@ -124,7 +126,7 @@ def seeder_units(session:TSession):
         print("Las unidades de medida ya existen en la base de datos.", u.name, u.symbol)
         return
     if not session.query(Unit).first():
-        session.add_all([unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg])
+        session.add_all([unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg, unit_spo2])
         session.commit()
         session.refresh(unit_kilogram)
         session.refresh(unit_meter)
@@ -133,6 +135,7 @@ def seeder_units(session:TSession):
         session.refresh(unit_second)
         session.refresh(unit_ampere)
         session.refresh(unit_mmHg)
+        session.refresh(unit_spo2)
         print("Unidades de medida insertadas correctamente.")
     else:
         raise Exception("Las unidades de medida ya existen en la base de datos.")
@@ -242,6 +245,7 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
     measure_type_insulin = MeasureType(name="Insulina", id_unit=unit_liter.id)  # Puede estar relacionado con "L"
     measure_type_urinary_volume = MeasureType(name="Volumen Urinario de 24h", id_unit=unit_liter.id)
     measure_type_respirations = MeasureType(name="Respiraciones por Minuto", id_unit=unit_second.id)  # En "s" (segundos)
+    measure_type_oxigenacion = MeasureType(name="Oxigenación", id_unit=unit_spo2.id)
 
 # Agregar los tipos de medición para 'Generales'
     t = session.query(MeasureType).first()
@@ -252,7 +256,7 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
     if not session.query(MeasureType).first():
         session.add_all([measure_type_weight, measure_type_height, measure_type_bmi, measure_type_normal_weight,
                          measure_type_left_grip, measure_type_right_grip, measure_type_systolic_pressure,
-                         measure_type_diastolic_pressure, measure_type_insulin, measure_type_urinary_volume, measure_type_respirations])
+                         measure_type_diastolic_pressure, measure_type_insulin, measure_type_urinary_volume, measure_type_respirations, measure_type_oxigenacion])
         session.commit()
         print("Tipos de medición para 'Generales' insertados correctamente.")
         # Refrescar para obtener los IDs de los tipos de medición recién creados
@@ -269,6 +273,7 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
         session.refresh(measure_type_insulin)
         session.refresh(measure_type_urinary_volume)
         session.refresh(measure_type_respirations)
+        session.refresh(measure_type_oxigenacion)
     else:
         raise Exception("Los tipos de medición para 'Generales' ya existen en la base de datos.")
 
@@ -284,7 +289,8 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
         MeasureTypeGroup(measure_type=measure_type_diastolic_pressure, id_measure_group=measure_group_general.id),
         MeasureTypeGroup(measure_type=measure_type_insulin, id_measure_group=measure_group_general.id),
         MeasureTypeGroup(measure_type=measure_type_urinary_volume, id_measure_group=measure_group_general.id),
-        MeasureTypeGroup(measure_type=measure_type_respirations, id_measure_group=measure_group_general.id)
+        MeasureTypeGroup(measure_type=measure_type_respirations, id_measure_group=measure_group_general.id),
+        MeasureTypeGroup(measure_type=measure_type_oxigenacion, id_measure_group=measure_group_general.id)
     ])
     session.commit()
     print("Relaciones entre tipos de medición y grupo 'Generales' insertadas correctamente.")
