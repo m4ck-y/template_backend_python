@@ -99,6 +99,7 @@ unit_second: Unit = None
 unit_ampere: Unit = None
 unit_mmHg: Unit = None
 unit_spo2: Unit = None
+unit_lpm: Unit = None
 
 
 
@@ -115,6 +116,7 @@ def seeder_units(session:TSession):
     unit_ampere = Unit(name="Ampere", symbol="A")
     unit_mmHg = Unit(name="Millimeters of Mercury", symbol="mmHg")  # Para la presión arterial
     unit_spo2 = Unit(name="Saturacion periferica de Oxigeno", symbol="spo2")
+    unit_lpm = Unit(name="Latidos por minuto", symbol="lpm")
 
 
     # Agregar las unidades si no existen en la base de datos
@@ -126,7 +128,7 @@ def seeder_units(session:TSession):
         print("Las unidades de medida ya existen en la base de datos.", u.name, u.symbol)
         return
     if not session.query(Unit).first():
-        session.add_all([unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg, unit_spo2])
+        session.add_all([unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg, unit_spo2, unit_lpm])
         session.commit()
         session.refresh(unit_kilogram)
         session.refresh(unit_meter)
@@ -136,6 +138,7 @@ def seeder_units(session:TSession):
         session.refresh(unit_ampere)
         session.refresh(unit_mmHg)
         session.refresh(unit_spo2)
+        session.refresh(unit_lpm)
         print("Unidades de medida insertadas correctamente.")
     else:
         raise Exception("Las unidades de medida ya existen en la base de datos.")
@@ -159,7 +162,7 @@ def Seeder():
     # Crear y agregar los grupos de medición
     measure_group_general = MeasureGroup(name="Generales")
     measure_group_temperature = MeasureGroup(name="Temperatura")
-    measure_group_pulse = MeasureGroup(name="Pulso")
+    measure_group_pulse = MeasureGroup(name="Frecuencia cardiaca")
     measure_group_skinfold = MeasureGroup(name="Pliegues")
     measure_group_circumference = MeasureGroup(name="Circunferencias")
     measure_group_diameter = MeasureGroup(name="Diámetros")
@@ -328,41 +331,51 @@ def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session:
 
 def Seeder_measure_pulse(measure_group_pulse: MeasureGroup, session: TSession):
  # Crear y agregar los tipos de medición para el grupo 'Pulso'
-    pulse_carotideo = MeasureType(name="Carotídeo", id_unit=unit_second.id)
+    """ pulse_carotideo = MeasureType(name="Carotídeo", id_unit=unit_second.id)
     pulse_radial = MeasureType(name="Radial", id_unit=unit_second.id)
     pulse_axilar = MeasureType(name="Axilar", id_unit=unit_second.id)
     pulse_braquial = MeasureType(name="Braquial", id_unit=unit_second.id)
     pulse_femoral = MeasureType(name="Femoral", id_unit=unit_second.id)
     pulse_popliteo = MeasureType(name="Popliteo", id_unit=unit_second.id)
     pulse_pedio = MeasureType(name="Pedio", id_unit=unit_second.id)
-    pulse_tibial_posterior = MeasureType(name="Tibial Posterior", id_unit=unit_second.id)
+    pulse_tibial_posterior = MeasureType(name="Tibial Posterior", id_unit=unit_second.id) """
+
+    pulse_manual = MeasureType(name="Manual", id_unit=unit_lpm.id)
+    pulse_digital = MeasureType(name="Digital", id_unit=unit_lpm.id)
 
     # Agregar los tipos de medición para 'Pulso'
-    session.add_all([pulse_carotideo, pulse_radial, pulse_axilar, pulse_braquial, pulse_femoral, pulse_popliteo, pulse_pedio, pulse_tibial_posterior])
+    #session.add_all([pulse_carotideo, pulse_radial, pulse_axilar, pulse_braquial, pulse_femoral, pulse_popliteo, pulse_pedio, pulse_tibial_posterior])
+    session.add_all([pulse_manual, pulse_digital])
     session.commit()
     print("Tipos de medición para 'Pulso' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de pulso
-    session.refresh(pulse_carotideo)
+    """ session.refresh(pulse_carotideo)
     session.refresh(pulse_radial)
     session.refresh(pulse_axilar)
     session.refresh(pulse_braquial)
     session.refresh(pulse_femoral)
     session.refresh(pulse_popliteo)
     session.refresh(pulse_pedio)
-    session.refresh(pulse_tibial_posterior)
+    session.refresh(pulse_tibial_posterior) """
+
+    session.refresh(pulse_manual)
+    session.refresh(pulse_digital)
 
     # Crear relaciones entre los tipos de medición y el grupo 'Pulso'
     #session.add(MeasureTypeGroup(measure_type=pulse_carotideo, id_measure_group=measure_group_pulse.id))
     session.add_all([
-        MeasureTypeGroup(measure_type=pulse_carotideo, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_radial, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_axilar, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_braquial, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_femoral, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_popliteo, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_pedio, id_measure_group=measure_group_pulse.id),
-        MeasureTypeGroup(measure_type=pulse_tibial_posterior, id_measure_group=measure_group_pulse.id)
+        # MeasureTypeGroup(measure_type=pulse_carotideo, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_radial, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_axilar, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_braquial, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_femoral, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_popliteo, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_pedio, id_measure_group=measure_group_pulse.id),
+        # MeasureTypeGroup(measure_type=pulse_tibial_posterior, id_measure_group=measure_group_pulse.id)
+        MeasureTypeGroup(measure_type=pulse_manual, id_measure_group=measure_group_pulse.id),
+        MeasureTypeGroup(measure_type=pulse_digital, id_measure_group=measure_group_pulse.id)
+
     ])
     session.commit()
     print("Relaciones entre tipos de medición y grupo 'Pulso' insertadas correctamente.")
