@@ -6,6 +6,7 @@ from app.health.infrastructure.database.model.measure_type_group import MeasureT
 from app.health.infrastructure.database.model.measurement import Measurement
 
 from app.config.db import Session, engine, TSession
+from app.utils.log import log_info, log_error
 """
 medidas generales{
 	peso
@@ -104,10 +105,10 @@ unit_lpm: Unit = None
 
 
 def seeder_units(session:TSession):
-    print("---- Count unit return", session.query(Unit).count())
+    log_info("---- Count unit return", session.query(Unit).count())
 
     # Crear y agregar las unidades de medida
-    global unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg
+    global unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg, unit_spo2, unit_lpm
     unit_kilogram = Unit(name="Kilogram", symbol="kg")
     unit_meter = Unit(name="Meter", symbol="m")
     unit_celsius = Unit(name="Celsius", symbol="°C")
@@ -122,10 +123,10 @@ def seeder_units(session:TSession):
     # Agregar las unidades si no existen en la base de datos
     u = session.query(Unit).first()
 
-    print("---- First unit",u)
-    print("list", session.query(Unit).count())
+    log_info("---- First unit",u)
+    log_info("list", session.query(Unit).count())
     if u:
-        print("Las unidades de medida ya existen en la base de datos.", u.name, u.symbol)
+        log_info("Las unidades de medida ya existen en la base de datos.", u.name, u.symbol)
         return
     if not session.query(Unit).first():
         session.add_all([unit_kilogram, unit_meter, unit_celsius, unit_liter, unit_second, unit_ampere, unit_mmHg, unit_spo2, unit_lpm])
@@ -139,7 +140,7 @@ def seeder_units(session:TSession):
         session.refresh(unit_mmHg)
         session.refresh(unit_spo2)
         session.refresh(unit_lpm)
-        print("Unidades de medida insertadas correctamente.")
+        log_info("Unidades de medida insertadas correctamente.")
     else:
         raise Exception("Las unidades de medida ya existen en la base de datos.")
 
@@ -147,7 +148,7 @@ def seeder_units(session:TSession):
 
 
 def init():
-    print("init >>> health")
+    log_info("init >>> health")
 
 def Seeder():
     session = Session()
@@ -155,7 +156,7 @@ def Seeder():
     try:
         seeder_units(session)
     except Exception as e:
-        print("Error al insertar las unidades de medida:", e)
+        log_error("Error al insertar las unidades de medida:", e)
         return
    
 
@@ -173,7 +174,7 @@ def Seeder():
         session.add_all([measure_group_general, measure_group_temperature, measure_group_pulse, measure_group_skinfold,
                          measure_group_circumference, measure_group_diameter, measure_group_length])
         session.commit()
-        print("Grupos de medición insertados correctamente.")
+        log_info("Grupos de medición insertados correctamente.")
 
         # Refrescar para obtener los IDs de los grupos recién creados
         session.refresh(measure_group_general)
@@ -184,13 +185,13 @@ def Seeder():
         session.refresh(measure_group_diameter)
         session.refresh(measure_group_length)
     else:
-        print("Los grupos de medición ya existen en la base de datos.")
+        log_info("Los grupos de medición ya existen en la base de datos.")
 
 
     try:
         Seeder_measure_general(measure_group_general, session)
     except Exception as e:
-        print("Error al insertar las medidas generales:", e)
+        log_error("Error al insertar las medidas generales:", e)
         return
 
     
@@ -198,39 +199,39 @@ def Seeder():
     try:
         Seeder_measure_temperature(measure_group_temperature, session)
     except Exception as e:
-        print("Error al insertar las medidas de temperatura:", e)
+        log_error("Error al insertar las medidas de temperatura:", e)
         return
     
 
     try:
         Seeder_measure_pulse(measure_group_pulse, session)
     except Exception as e:
-        print("Error al insertar las medidas de pulso:", e)
+        log_error("Error al insertar las medidas de pulso:", e)
         return
     
     try:
         Seeder_measure_pliegues(measure_group_skinfold, session)
     except Exception as e:
-        print("Error al insertar las medidas de pliegues:", e)
+        log_error("Error al insertar las medidas de pliegues:", e)
         return
 
     try:
         Seeder_measure_circumference(measure_group_circumference, session)
     except Exception as e:
-        print("Error al insertar las medidas de circunferencias:", e)
+        log_error("Error al insertar las medidas de circunferencias:", e)
         return
     
     try:
         Seeder_measure_diameter(measure_group_diameter, session)
     except Exception as e:
-        print("Error al insertar las medidas de diametros:", e)
+        log_error("Error al insertar las medidas de diametros:", e)
         return
 
     
     try:
         Seeder_measure_length(measure_group_length, session)
     except Exception as e:
-        print("Error al insertar las medidas de longitud:", e)
+        log_error("Error al insertar las medidas de longitud:", e)
         return
 
 
@@ -252,20 +253,20 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
 
 # Agregar los tipos de medición para 'Generales'
     t = session.query(MeasureType).first()
-    print("----- --- --- --- --- -- --- -- MeasureType: ", type(t), t, not t)
+    log_info("----- --- --- --- --- -- --- -- MeasureType: ", type(t), t, not t)
     if t is not None:
-        print(t.name, t.id_unit, unit_kilogram.id)
+        log_info(t.name, t.id_unit, unit_kilogram.id)
 
     if not session.query(MeasureType).first():
         session.add_all([measure_type_weight, measure_type_height, measure_type_bmi, measure_type_normal_weight,
                          measure_type_left_grip, measure_type_right_grip, measure_type_systolic_pressure,
                          measure_type_diastolic_pressure, measure_type_insulin, measure_type_urinary_volume, measure_type_respirations, measure_type_oxigenacion])
         session.commit()
-        print("Tipos de medición para 'Generales' insertados correctamente.")
+        log_info("Tipos de medición para 'Generales' insertados correctamente.")
         # Refrescar para obtener los IDs de los tipos de medición recién creados
         session.refresh(measure_type_weight)
-        print("----- --- --- --- --- -- --- -- MeasureType weight: ", measure_type_weight)
-        print("----- --- --- --- --- -- --- -- id", measure_type_weight.id)
+        log_info("----- --- --- --- --- -- --- -- MeasureType weight: ", measure_type_weight)
+        log_info("----- --- --- --- --- -- --- -- id", measure_type_weight.id)
         session.refresh(measure_type_height)
         session.refresh(measure_type_bmi)
         session.refresh(measure_type_normal_weight)
@@ -296,7 +297,7 @@ def Seeder_measure_general(measure_group_general: MeasureGroup, session: TSessio
         MeasureTypeGroup(measure_type=measure_type_oxigenacion, id_measure_group=measure_group_general.id)
     ])
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Generales' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Generales' insertadas correctamente.")
 
 def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session: TSession):
     # Crear y agregar los tipos de medición para el grupo 'Temperatura'
@@ -304,12 +305,12 @@ def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session:
     measure_type_axillary_temperature = MeasureType(name="Axilar", id_unit=unit_celsius.id)
     measure_type_inguinal_temperature = MeasureType(name="Inguinal", id_unit=unit_celsius.id)
     measure_type_anal_temperature = MeasureType(name="Anal", id_unit=unit_celsius.id)
-    measure_type_infrarrojo = MeasureType("Infrarrojo", id_unit=unit_celsius.id)
+    measure_type_infrarrojo = MeasureType(name= "Infrarrojo", id_unit=unit_celsius.id)
 
     # Agregar los tipos de medición para 'Temperatura'
     session.add_all([measure_type_buccal_temperature, measure_type_axillary_temperature, measure_type_inguinal_temperature, measure_type_anal_temperature, measure_type_infrarrojo])
     session.commit()
-    print("Tipos de medición para 'Temperatura' insertados correctamente.")
+    log_info("Tipos de medición para 'Temperatura' insertados correctamente.")
 
     # Refrescar para obtener los IDs de los tipos de medición de temperatura
     session.refresh(measure_type_buccal_temperature)
@@ -327,7 +328,7 @@ def Seeder_measure_temperature(measure_group_temperature: MeasureGroup, session:
         MeasureTypeGroup(measure_type=measure_type_infrarrojo, id_measure_group=measure_group_temperature.id)
     ])
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Temperatura' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Temperatura' insertadas correctamente.")
 
 def Seeder_measure_pulse(measure_group_pulse: MeasureGroup, session: TSession):
  # Crear y agregar los tipos de medición para el grupo 'Pulso'
@@ -347,7 +348,7 @@ def Seeder_measure_pulse(measure_group_pulse: MeasureGroup, session: TSession):
     #session.add_all([pulse_carotideo, pulse_radial, pulse_axilar, pulse_braquial, pulse_femoral, pulse_popliteo, pulse_pedio, pulse_tibial_posterior])
     session.add_all([pulse_manual, pulse_digital])
     session.commit()
-    print("Tipos de medición para 'Pulso' insertados correctamente.")
+    log_info("Tipos de medición para 'Pulso' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de pulso
     """ session.refresh(pulse_carotideo)
@@ -378,7 +379,7 @@ def Seeder_measure_pulse(measure_group_pulse: MeasureGroup, session: TSession):
 
     ])
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Pulso' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Pulso' insertadas correctamente.")
 
 def Seeder_measure_pliegues(measure_group_skinfold: MeasureGroup, session: TSession):
     # Crear y agregar los tipos de medición para el grupo 'Pliegues'
@@ -397,7 +398,7 @@ def Seeder_measure_pliegues(measure_group_skinfold: MeasureGroup, session: TSess
     # Agregar los tipos de medición para 'Pliegues'
     session.add_all([pliegue_pectoral, pliegue_axilar, pliegue_triceps, pliegue_subescapular, pliegue_biceps, pliegue_suprailiaco, pliegue_supraespinal, pliegue_abdominal, pliegue_muslo, pliegue_pantorrilla, pliegue_sumatoria])
     session.commit()
-    print("Tipos de medición para 'Pliegues' insertados correctamente.")
+    log_info("Tipos de medición para 'Pliegues' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de pliegues
     session.refresh(pliegue_pectoral)
@@ -427,7 +428,7 @@ def Seeder_measure_pliegues(measure_group_skinfold: MeasureGroup, session: TSess
         MeasureTypeGroup(measure_type=pliegue_sumatoria, id_measure_group=measure_group_skinfold.id)
     ])
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Pliegues' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Pliegues' insertadas correctamente.")
 
 def Seeder_measure_circumference(measure_group_circumference: MeasureGroup, session: TSession):
     # Crear y agregar los tipos de medición para el grupo 'Circunferencias'
@@ -467,7 +468,7 @@ def Seeder_measure_circumference(measure_group_circumference: MeasureGroup, sess
         circumference_tobillo
     ])
     session.commit()
-    print("Tipos de medición para 'Circunferencias' insertados correctamente.")
+    log_info("Tipos de medición para 'Circunferencias' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de circunferencia
     session.refresh(circumference_cefalico)
@@ -503,7 +504,7 @@ def Seeder_measure_circumference(measure_group_circumference: MeasureGroup, sess
     session.add(MeasureTypeGroup(measure_type=circumference_pantorrilla, id_measure_group=measure_group_circumference.id))
     session.add(MeasureTypeGroup(measure_type=circumference_tobillo, id_measure_group=measure_group_circumference.id))
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Circunferencias' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Circunferencias' insertadas correctamente.")
 
 def Seeder_measure_diameter(measure_group_diameter: MeasureGroup, session: TSession):
     # Crear y agregar los tipos de medición para el grupo 'Diámetros'
@@ -537,7 +538,7 @@ def Seeder_measure_diameter(measure_group_diameter: MeasureGroup, session: TSess
         diameter_transverso_mano
     ])
     session.commit()
-    print("Tipos de medición para 'Diámetros' insertados correctamente.")
+    log_info("Tipos de medición para 'Diámetros' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de diámetro
     session.refresh(diameter_biacromial)
@@ -567,7 +568,7 @@ def Seeder_measure_diameter(measure_group_diameter: MeasureGroup, session: TSess
     session.add(MeasureTypeGroup(measure_type=diameter_mano, id_measure_group=measure_group_diameter.id))
     session.add(MeasureTypeGroup(measure_type=diameter_transverso_mano, id_measure_group=measure_group_diameter.id))
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Diámetros' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Diámetros' insertadas correctamente.")
 
 
 def Seeder_measure_length(measure_group_length: MeasureGroup, session: TSession):
@@ -595,7 +596,7 @@ def Seeder_measure_length(measure_group_length: MeasureGroup, session: TSession)
         lenght_envergadura
     ])
     session.commit()
-    print("Tipos de medición para 'Longitudes' insertados correctamente.")
+    log_info("Tipos de medición para 'Longitudes' insertados correctamente.")
 
     # Refrescar para obtener el ID de los tipos de medición de longitudes
     session.refresh(lenght_acromial)
@@ -619,4 +620,4 @@ def Seeder_measure_length(measure_group_length: MeasureGroup, session: TSession)
     session.add(MeasureTypeGroup(measure_type=lenght_tibial_medial, id_measure_group=measure_group_length.id))
     session.add(MeasureTypeGroup(measure_type=lenght_envergadura, id_measure_group=measure_group_length.id))
     session.commit()
-    print("Relaciones entre tipos de medición y grupo 'Longitudes' insertadas correctamente.")
+    log_info("Relaciones entre tipos de medición y grupo 'Longitudes' insertadas correctamente.")
