@@ -1,19 +1,19 @@
-import os
-from dotenv import load_dotenv
+from pydantic_settings import SettingsConfigDict, BaseSettings
 
-# Cargar variables de entorno desde un archivo .env
-load_dotenv()
+class Settings(BaseSettings):
+    API_HOST: str = "127.0.0.1"
+    API_PORT: int = 8000
+    DEBUG: bool = False
 
+    # Valor por defecto a SQLite, se puede sobreescribir con variable de entorno
+    SQLALCHEMY_DB_URL: str = "sqlite:///dev.db" #"postgresql+psycopg2://user:pass@127.0.0.1:5432/db_name"
 
-API_HOST = os.getenv("API_HOST")
-API_PORT = int(os.getenv("API_PORT"))
+    DB_POSTGRES_HOST: str = ""
+    DB_POSTGRES_PORT: int = 5432
+    DB_POSTGRES_NAME: str = ""
+    DB_POSTGRES_USER: str = ""
+    DB_POSTGRES_PASS: str = ""
 
-SQLALCHEMY_DB_URL = os.getenv("SQLALCHEMY_DB_URL")
+    model_config = SettingsConfigDict(env_file=".env")
 
-DEBUG = os.getenv("DEBUG", 'false').lower() in ('true', '1', 't')
-
-DB_POSTGRES_HOST = os.getenv("DB_POSTGRES_HOST")
-DB_POSTGRES_PORT = os.getenv("DB_POSTGRES_PORT")
-DB_POSTGRES_NAME = os.getenv("DB_POSTGRES_NAME")
-DB_POSTGRES_USER = os.getenv("DB_POSTGRES_USER")
-DB_POSTGRES_PASS = os.getenv("DB_POSTGRES_PASS")
+settings = Settings()
