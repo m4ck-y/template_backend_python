@@ -17,17 +17,17 @@ def init_db():
 
     print("init >>> db ... ") 
     init_person()
-    init_health()
-    init_company()
-    init_health_facility()
+    #init_health()
+    #init_company()
+    #init_health_facility()
     init_account()
     init_security()
-    init_employee()
+    #init_employee()
     Base.metadata.create_all(bind=engine)
 
-    SeederHealth()
-    id_health_industry = SeederCompany()
+    #SeederHealth()
+    #id_health_industry = SeederCompany()
 
-    SeederHealthFacility(id_health_industry)
+    #SeederHealthFacility(id_health_industry)
 
 print("app/config/init_db.py")
