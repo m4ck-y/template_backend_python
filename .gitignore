@@ -26,3 +26,7 @@ htmlcov/
 
 #SQLite
 *.db
+
+
+# AI Development Configuration
+.kiro/

@@ -1,5 +1,6 @@
 # Importamos la clase base de SQLAlchemy y la función que detecta si usamos PostgreSQL
 from app.config.db import is_db_postgres
+from app.utils.infrastructure.database.table_name import TableName
 
 def SchemaPerson(name: str) -> str:
     """
@@ -12,3 +13,8 @@ def SchemaPerson(name: str) -> str:
     else:
         #return f"person_{name.lower()}"  # En SQLite, la tabla tiene el prefijo 'person_'.
         return ""
+
+class PersonSchema:
+    NAME = "person"
+    TBL_PERSON = TableName(None, "person") #Schema Publico
+    TBL_BIRTH_INFO = TableName(NAME, "birth_info")

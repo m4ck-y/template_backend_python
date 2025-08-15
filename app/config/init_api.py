@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.health.infrastructure.service.setup import setup_all as setup_health
+#from app.health.infrastructure.service.setup import setup_all as setup_health
 from app.person.infrastructure.service.setup import setup_module_person
 
 

@@ -4,9 +4,20 @@ from sqlalchemy.orm import relationship
 from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.domain.enum.gender import EGenderIdentity
 from app.utils.enum.verification_status import EVerificationStatus
+from app.person.infrastructure.database.schema import PersonSchema
+
+
+print(f"""
+
+__tablename: {PersonSchema.TBL_PERSON.name}
+__table_args: {PersonSchema.NAME}
+
+""")
 
 class Person(BaseModel):
-    __tablename__ = 'person'
+    __tablename__ = PersonSchema.TBL_PERSON.name
+
+    __table_args__ = {'schema': PersonSchema.TBL_PERSON.schema}
 
     verification_status = Column(Enum(EVerificationStatus), nullable=False, default=EVerificationStatus.PENDING)
     url_photo = Column(String)
@@ -20,38 +31,38 @@ class Person(BaseModel):
     # 1:1 | 1 person -> 1 birth_info
     birth_info = relationship("BirthInfo", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 sociocultural_identity
-    sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
+    # -- sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 legal_info
-    legal_info = relationship("LegalInfo", back_populates="person", uselist=False)
+    # -- legal_info = relationship("LegalInfo", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N person_identifier
-    list_person_identifiers = relationship("PersonIdentifier", back_populates="person")
+    # -- list_person_identifiers = relationship("PersonIdentifier", back_populates="person")
     # 1:N | 1 person -> N document
-    list_documents = relationship("Document", back_populates="person")
+    # -- list_documents = relationship("Document", back_populates="person")
 
     # CONTACT INFO
     # 1:N | 1 person -> N address
-    list_addresses = relationship("Address", back_populates="person")
+    # -- list_addresses = relationship("Address", back_populates="person")
     # 1:N | 1 person -> N phone
-    list_phones = relationship("Phone", back_populates="person")
+    # -- list_phones = relationship("Phone", back_populates="person")
     # 1:N | 1 person -> N email
-    list_emails = relationship("Email", back_populates="person")
+    # -- list_emails = relationship("Email", back_populates="person")
 
 
     # HEALTH
     # 1:1 | 1 person -> 1 health_info
-    health_info = relationship("HealthInfo", back_populates="person", uselist=False)
+    # -- health_info = relationship("HealthInfo", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N measurement
-    list_measurements = relationship("Measurement", back_populates="person")
+    # -- list_measurements = relationship("Measurement", back_populates="person")
 
 
     # ACCOUNT
     # 1:1 | 1 person -> 1 user
-    user = relationship("User", back_populates="person", uselist=False)
+    # -- user = relationship("User", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N employee
-    list_employments = relationship("Employee", back_populates="person")
+    # -- list_employments = relationship("Employee", back_populates="person")
 
 
 
