@@ -1,98 +1,54 @@
-📘 README – Clase TableName: Gestión Escalable y Portátil de Esquemas y Tablas en SQLAlchemy
-🎯 Objetivo
+# �E️ TableName - Adaptador Multi-Motor para SQLAlchemy
 
-La clase TableName fue diseñada para resolver un problema común en entornos donde se necesita soportar múltiples motores de base de datos (como PostgreSQL y SQLite), manteniendo una arquitectura limpia, modular y escalable basada en schemas lógicos.
+## 🎯 Propósito
 
-🤔 ¿Por qué TableName?
+Clase utilitaria que abstrae las diferencias entre motores de base de datos para el manejo de esquemas y nombres de tabla, garantizando portabilidad entre PostgreSQL y SQLite.
 
-En motores como PostgreSQL, puedes organizar tablas dentro de schemas, lo cual permite separar dominios como person, health, admin, etc.
+## 🔧 Problema que Resuelve
 
-En SQLite, no existen schemas, por lo que todas las tablas comparten el mismo espacio de nombres. Esto genera conflictos si intentamos tener dos tablas con el mismo nombre en distintos schemas.
+- **PostgreSQL:** Soporta esquemas reales (`person.birth_info`)
+- **SQLite:** No tiene esquemas, requiere prefijos (`person_birth_info`)
 
-La clase TableName actúa como un adaptador de nombres de tabla según el motor actual, y se utiliza para:
+TableName unifica ambos enfoques automáticamente según el motor detectado.
 
-Asignar correctamente __tablename__
+## 📋 Propiedades Principales
 
-Establecer __table_args__['schema'] solo cuando es necesario
+| Propiedad | PostgreSQL | SQLite | Uso |
+|-----------|------------|--------|-----|
+| `.name` | `birth_info` | `person_birth_info` | `__tablename__` |
+| `.schema` | `person` | `None` | `__table_args__['schema']` |
+| `.identifier` | `person.birth_info` | `person_birth_info` | `ForeignKey()` |
 
-Construir claves foráneas (ForeignKey) de forma segura
+## 💻 Ejemplo de Uso
 
-Mantener la portabilidad y evitar errores de colisión de nombres
+```python
+# Definición del esquema
+class PersonSchema:
+    NAME = "person"
+    TBL_PERSON = TableName(None, "person")        # Esquema público
+    TBL_BIRTH_INFO = TableName(NAME, "birth_info") # Esquema person
 
-🛠 Métodos de TableName
-Método	Descripción breve
-.name	Nombre de la tabla a usar en __tablename__
-.schema	Nombre del esquema a usar en __table_args__['schema']
-.identifier	Nombre completo a usar en claves foráneas (schema.tabla o schema_tabla)
-.dotted	Representación en formato schema.table
-.prefixed	Representación en formato schema_table
-__str__()	Devuelve automáticamente .name cuando se usa como string
-📦 ¿Dónde y cómo se usa?
-1. __tablename__
-
-Se utiliza para asignar el nombre real de la tabla en SQLAlchemy.
-La lógica interna del método .name permite que se use el nombre apropiado según el motor actual.
-
-2. __table_args__['schema']
-
-Se aplica solo si el motor lo requiere (ej. PostgreSQL).
-SQLite ignora esta opción, y la clase TableName se asegura de devolver None si no aplica.
-
-3. ForeignKey (.identifier)
-
-Es crucial para construir claves foráneas sin errores.
-TableName.identifier asegura que el nombre sea correcto y compatible según el motor.
-
-📌 Ejemplo de uso aplicado (sin código)
-Modelo BirthInfo
-
-Este modelo representa información de nacimiento de una persona.
-
-Usa __tablename__ = TableName.name para nombrar la tabla correctamente según el motor.
-
-Usa __table_args__ = {'schema': TableName.schema} para declarar el esquema solo si es necesario.
-
-Declara una clave foránea hacia la tabla Person utilizando TableName.identifier para asegurar portabilidad.
-
-Establece una relación uno a uno con el modelo Person.
-
-Representación lógica:
+# Modelo SQLAlchemy
 class BirthInfo(BaseModel):
-    __tablename__ = [TableName.name de person_birth_info]
-    __table_args__ = {"schema": [TableName.schema de person_birth_info]}
+    __tablename__ = PersonSchema.TBL_BIRTH_INFO.name
+    __table_args__ = {'schema': PersonSchema.TBL_BIRTH_INFO.schema}
+    
+    # Clave foránea portable
+    id_person = Column(Integer, 
+                      ForeignKey(f"{PersonSchema.TBL_PERSON.identifier}.id"),
+                      nullable=False, unique=True)
+```
 
-    id_person = Column(Integer, ForeignKey([TableName.identifier de person], nullable=False, unique=True))
+## ✅ Beneficios
 
-    # 1:1 | 1 birth_info → 1 person
-    person = relationship("Person", back_populates="birth_info")
+- **Portabilidad:** Código idéntico funciona en PostgreSQL y SQLite
+- **DRY:** Centraliza la lógica de nombres de tabla
+- **Seguridad:** Previene errores de referencia entre tablas
+- **Escalabilidad:** Facilita agregar nuevos esquemas y tablas
 
-💡 Beneficios del enfoque
-Beneficio	Explicación
-✅ Portabilidad	Sin cambios de código entre PostgreSQL y SQLite
-✅ Escalabilidad	Puedes agregar más schemas/tablas sin conflictos
-✅ DRY	Evitas repetir strings y nombres manualmente
-✅ Legibilidad	El código expresa claramente la intención de diseño modular
-✅ Seguridad	Las claves foráneas se construyen correctamente en cualquier motor
-🧼 Recomendaciones de uso
+## 🎯 Reglas de Uso
 
-Usa .name para __tablename__.
-
-Usa .schema únicamente en __table_args__.
-
-Usa .identifier para ForeignKey(...) y expresiones SQL.
-
-Nunca escribas manualmente strings como "person.document" o "person_document". Centraliza todo con TableName.
-
-✅ Conclusión
-
-La existencia y desarrollo de la clase TableName permite:
-
-Evitar errores típicos al cambiar entre motores de base de datos.
-
-Mantener una arquitectura modular basada en schemas.
-
-Desarrollar de forma limpia y escalable en proyectos complejos.
-
-Abstraer las diferencias del motor y centrarte en el modelo de datos, no en las limitaciones técnicas del motor.
-
-🧠 Piensa en esquemas como namespaces, y en TableName como el traductor entre tu diseño lógico y la implementación física en SQL.
+1. **Siempre** usar `.name` para `__tablename__`
+2. **Siempre** usar `.schema` para `__table_args__['schema']`
+3. **Siempre** usar `.identifier` para `ForeignKey()`
+4. **Nunca** hardcodear nombres como `"person.document"`
