@@ -1,4 +1,5 @@
 from app.person.infrastructure.database.init import init as init_person
+from app.health_profile.infrastructure.database.init import init as init_health_profile
 from app.health_monitoring.infrastructure.database.init import init as init_health, Seeder as SeederHealth
 # from app.company.infrastructure.database.init import init as init_company, Seeder as SeederCompany
 # from app.health_facility.infrastructure.database.init import init as init_health_facility, Seeder as SeederHealthFacility
@@ -32,6 +33,7 @@ def init_db():
 
     print("init >>> db ... ") 
     init_person()
+    init_health_profile()
     init_health()
     #init_company()
     #init_health_facility()

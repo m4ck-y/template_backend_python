@@ -1,4 +1,4 @@
-from app.health_monitoring.infrastructure.database.model.biological_profile import BiologicalProfile
+from app.health_profile.infrastructure.database.model.biological_profile import BiologicalProfile
 from app.health_monitoring.infrastructure.database.model.measure_group import MeasureGroup
 from app.health_monitoring.infrastructure.database.model.unit import Unit
 from app.health_monitoring.infrastructure.database.model.measure_type import MeasureType
