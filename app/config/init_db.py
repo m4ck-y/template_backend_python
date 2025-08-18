@@ -40,7 +40,7 @@ def init_db():
     #init_employee()
     Base.metadata.create_all(bind=engine)
 
-    #SeederHealth()
+    SeederHealth()
     #id_health_industry = SeederCompany()
 
     #SeederHealthFacility(id_health_industry)

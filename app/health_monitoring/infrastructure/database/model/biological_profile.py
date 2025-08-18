@@ -7,6 +7,7 @@ from app.health_monitoring.domain.enum.blood_type import EBloodType
 
 #from app.health_monitoring.infrastructure.database.schema import HealthMonitoringSchema
 from app.health_profile.schema import HealthProfileSchema
+from app.person.infrastructure.database.schema import PersonSchema
 
 
 print(f"""
@@ -22,7 +23,7 @@ class BiologicalProfile(BaseModel):
 
     __table_args__ = {'schema': HealthProfileSchema.TBL_BIOLOGICAL_PROFILE.schema}
 
-    id_person = Column(Integer, ForeignKey(F'{HealthProfileSchema.TBL_BIOLOGICAL_PROFILE.identifier}.id'), nullable=False)
+    id_person = Column(Integer, ForeignKey(f'{PersonSchema.TBL_PERSON.identifier}.id'), nullable=False)
     # 1 person -> 1 health_info
     person = relationship("Person", back_populates="biological_profile")
 
