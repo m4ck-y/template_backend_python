@@ -1,8 +1,6 @@
 from pydantic_settings import SettingsConfigDict, BaseSettings
 
 class Settings(BaseSettings):
-    API_HOST: str = "127.0.0.1"
-    API_PORT: int = 8000
     DEBUG: bool = False
 
     # Valor por defecto a SQLite, se puede sobreescribir con variable de entorno

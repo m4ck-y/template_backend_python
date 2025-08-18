@@ -50,11 +50,11 @@ class Person(BaseModel):
 
 
     # HEALTH
-    # 1:1 | 1 person -> 1 health_info
-    # -- health_info = relationship("HealthInfo", back_populates="person", uselist=False)
+    # 1:1 | 1 person -> 1 biological_profile
+    biological_profile = relationship("BiologicalProfile", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N measurement
-    # -- list_measurements = relationship("Measurement", back_populates="person")
+    list_measurements = relationship("Measurement", back_populates="person")
 
 
     # ACCOUNT

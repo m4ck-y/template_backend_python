@@ -1,23 +1,38 @@
 from app.person.infrastructure.database.init import init as init_person
-# from app.health.infrastructure.database.init import init as init_health, Seeder as SeederHealth
+from app.health_monitoring.infrastructure.database.init import init as init_health, Seeder as SeederHealth
 # from app.company.infrastructure.database.init import init as init_company, Seeder as SeederCompany
 # from app.health_facility.infrastructure.database.init import init as init_health_facility, Seeder as SeederHealthFacility
 # from app.account.infrastructure.database.init import init as init_account
 # from app.security.infrastructure.database.init import init as init_security
 # from app.employee.infrastructure.database.init import init as init_employee
 
+from app.person.infrastructure.database.schema import NAME as SCHEMA_PERSON
+from app.health_profile.schema import NAME as SCHEMA_HEALTH_PROFILE
+from app.health_monitoring.infrastructure.database.schema import NAME as SCHEMA_HEALTH_MONITORING
+
 from app.config.db import Base, engine, is_db_postgres, CreateSchema
 
 def init_db():
 
     if is_db_postgres():
-        CreateSchema("person", "health", "company", "health_facility", "account", "security", "profile", "employee")
+        CreateSchema(
+            SCHEMA_PERSON,
+            SCHEMA_HEALTH_PROFILE,
+            SCHEMA_HEALTH_MONITORING,
+            "health",
+            "company",
+            "health_facility",
+            "account",
+            "security",
+            "profile",
+            "employee"
+        )
 
 
 
     print("init >>> db ... ") 
     init_person()
-    #init_health()
+    init_health()
     #init_company()
     #init_health_facility()
     #init_account()
