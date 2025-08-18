@@ -2,12 +2,12 @@ from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.domain.enum.identifier import EIdentifierType
-from app.person.infrastructure.database.schema import SchemaPerson
+from app.person.infrastructure.database.schema import PersonSchema
 
 class IdentifierType(BaseModel):
-    __tablename__ = 'identifier_type'
+    __tablename__ = PersonSchema.TBL_IDENTIFIER_TYPE.name
 
-    __table_args__ = {'schema': 'person'}
+    __table_args__ = {'schema': PersonSchema.TBL_IDENTIFIER_TYPE.schema}
 
     type_identifier = Column(Enum(EIdentifierType), nullable=False)
     name = Column(String, nullable=False)

@@ -4,14 +4,14 @@ from sqlalchemy.orm import relationship
 from app.utils.infrastructure.database.base_model import BaseModel
 from app.person.domain.enum.answer import EAnswerGeneral, EAnswerMigrant
 
-from ..schema import SchemaPerson
+from ..schema import PersonSchema
 
 class SocioculturalIdentity(BaseModel):
-    __tablename__ = 'sociocultural_identity'
+    __tablename__ = PersonSchema.TBL_SOCIOCULTURAL_IDENTITY.name
 
-    __table_args__ = {'schema': 'person'}
+    __table_args__ = {'schema': PersonSchema.TBL_SOCIOCULTURAL_IDENTITY.schema}
 
-    id_person = Column(Integer, ForeignKey('person.id'), nullable=False)
+    id_person = Column(Integer, ForeignKey(f'{PersonSchema.TBL_PERSON.identifier}.id'), nullable=False)
     person = relationship("Person", back_populates="sociocultural_identity")
     
     self_considers_indigenous = Column(Enum(EAnswerGeneral), nullable=False)

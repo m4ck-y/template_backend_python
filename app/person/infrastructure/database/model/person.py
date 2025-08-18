@@ -31,22 +31,22 @@ class Person(BaseModel):
     # 1:1 | 1 person -> 1 birth
     birth = relationship("Birth", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 sociocultural_identity
-    # -- sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
+    sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 legal_info
-    # -- legal_info = relationship("LegalInfo", back_populates="person", uselist=False)
+    legal_info = relationship("LegalInfo", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N person_identifier
-    # -- list_person_identifiers = relationship("PersonIdentifier", back_populates="person")
+    list_person_identifiers = relationship("PersonIdentifier", back_populates="person")
     # 1:N | 1 person -> N document
-    # -- list_documents = relationship("Document", back_populates="person")
+    list_documents = relationship("Document", back_populates="person")
 
     # CONTACT INFO
     # 1:N | 1 person -> N address
-    # -- list_addresses = relationship("Address", back_populates="person")
+    list_addresses = relationship("Address", back_populates="person")
     # 1:N | 1 person -> N phone
-    # -- list_phones = relationship("Phone", back_populates="person")
+    list_phones = relationship("Phone", back_populates="person")
     # 1:N | 1 person -> N email
-    # -- list_emails = relationship("Email", back_populates="person")
+    list_emails = relationship("Email", back_populates="person")
 
 
     # HEALTH
