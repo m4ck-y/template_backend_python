@@ -28,8 +28,8 @@ class Person(BaseModel):
 
 
     #RELATIONSHIPS
-    # 1:1 | 1 person -> 1 birth_info
-    birth_info = relationship("BirthInfo", back_populates="person", uselist=False)
+    # 1:1 | 1 person -> 1 birth
+    birth = relationship("Birth", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 sociocultural_identity
     # -- sociocultural_identity = relationship("SocioculturalIdentity", back_populates="person", uselist=False)
     # 1:1 | 1 person -> 1 legal_info

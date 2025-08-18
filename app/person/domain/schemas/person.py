@@ -1,6 +1,6 @@
 from app.utils.domain.schemas.basemodel import ORMModel
 from app.person.domain.enum.gender import EGenderIdentity
-from app.person.domain.schemas.birth_info import SchemaBirthInfoCreate, SchemaBirthInfo
+from app.person.domain.schemas.birth import SchemaBirthCreate, SchemaBirth
 from app.utils.enum.verification_status import EVerificationStatus
 from typing import Union, Optional
 from pydantic import Field
@@ -14,7 +14,7 @@ class SchemaPersonBase(ORMModel):
     type_gender: EGenderIdentity
 
 class SchemaPersonCreate(SchemaPersonBase):
-    #birth_info: Optional[SchemaBirthInfoCreate] = None
+    #birth: Optional[SchemaBirthCreate] = None
     pass
 
 class SchemaPersonUpdate(SchemaPersonBase):
@@ -25,4 +25,4 @@ class SchemaPersonUpdate(SchemaPersonBase):
 
 class SchemaPerson(SchemaPersonUpdate):
     url_photo: Optional[str] = Field(..., examples=["profile.jpg"])
-    birth_info: Union[SchemaBirthInfo, int, None]
+    birth: Union[SchemaBirth, int, None]

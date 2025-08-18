@@ -6,8 +6,8 @@ Clase utilitaria que abstrae las diferencias entre motores de base de datos para
 
 ## 🔧 Problema que Resuelve
 
-- **PostgreSQL:** Soporta esquemas reales (`person.birth_info`)
-- **SQLite:** No tiene esquemas, requiere prefijos (`person_birth_info`)
+- **PostgreSQL:** Soporta esquemas reales (`person.birth`)
+- **SQLite:** No tiene esquemas, requiere prefijos (`person_birth`)
 
 TableName unifica ambos enfoques automáticamente según el motor detectado.
 
@@ -15,9 +15,9 @@ TableName unifica ambos enfoques automáticamente según el motor detectado.
 
 | Propiedad | PostgreSQL | SQLite | Uso |
 |-----------|------------|--------|-----|
-| `.name` | `birth_info` | `person_birth_info` | `__tablename__` |
+| `.name` | `birth` | `person_birth` | `__tablename__` |
 | `.schema` | `person` | `None` | `__table_args__['schema']` |
-| `.identifier` | `person.birth_info` | `person_birth_info` | `ForeignKey()` |
+| `.identifier` | `person.birth` | `person_birth` | `ForeignKey()` |
 
 ## 💻 Ejemplo de Uso
 
@@ -25,13 +25,13 @@ TableName unifica ambos enfoques automáticamente según el motor detectado.
 # Definición del esquema
 class PersonSchema:
     NAME = "person"
-    TBL_PERSON = TableName(None, "person")        # Esquema público
-    TBL_BIRTH_INFO = TableName(NAME, "birth_info") # Esquema person
+    TBL_PERSON = TableName(None, "person")    # Esquema público
+    TBL_BIRTH = TableName(NAME, "birth")      # Esquema person
 
 # Modelo SQLAlchemy
-class BirthInfo(BaseModel):
-    __tablename__ = PersonSchema.TBL_BIRTH_INFO.name
-    __table_args__ = {'schema': PersonSchema.TBL_BIRTH_INFO.schema}
+class Birth(BaseModel):
+    __tablename__ = PersonSchema.TBL_BIRTH.name
+    __table_args__ = {'schema': PersonSchema.TBL_BIRTH.schema}
     
     # Clave foránea portable
     id_person = Column(Integer, 

@@ -259,7 +259,7 @@ Migración completa a health_profile con todas las capas arquitectónicas.
 3. **✅ health_profile** - Perfil biológico estable
 
 ### ❌ **Módulos Pendientes de Separación Semántica (6/8 - 75%)**
-4. **❌ person_data** - Datos extendidos de persona (birth_info, addresses, documents)
+4. **❌ person_data** - Datos extendidos de persona (birth, addresses, documents)
 5. **❌ clinical_history** - Historial médico formal
 6. **❌ security** - Autenticación y autorización
 7. **❌ company** - Información empresarial
@@ -276,7 +276,7 @@ Migración completa a health_profile con todas las capas arquitectónicas.
 - [ ] Documentar la nueva arquitectura de separación de schemas
 
 ### 2. **Corto Plazo (1-2 días)**
-- [ ] Crear módulo person_data y mover birth_info desde person
+- [ ] Crear módulo person_data y mover birth desde person
 - [ ] Implementar tests unitarios específicos para health_profile
 - [ ] Agregar validaciones adicionales en BiologicalProfile
 

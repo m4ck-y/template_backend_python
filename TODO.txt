@@ -1,0 +1,64 @@
+SGBD: SQLite
+DATABASE: Preregistro
+TABLA preregistro:
+
+CREATE TABLE preregistro (
+        id INTEGER NOT NULL,
+        rol INTEGER NOT NULL,
+        correo VARCHAR NOT NULL,
+        telefono VARCHAR NOT NULL,
+        code_telefono VARCHAR,
+        contrasena VARCHAR NOT NULL,
+        estado_sesion INTEGER,
+        estado_perfil INTEGER,
+        telefono_verificado BOOLEAN,
+        correo_verificado BOOLEAN,
+        fecha_registro DATETIME,
+        codigo_verificacion VARCHAR,
+        first_name VARCHAR,
+        last_name VARCHAR,
+        second_last_name VARCHAR,
+        nacionalidad VARCHAR,
+        state VARCHAR,
+        abr_entidad VARCHAR,
+        curp VARCHAR,
+        sex_curp VARCHAR(1),
+        birthdate DATE,
+        url_foto VARCHAR,
+        url_ine VARCHAR,
+        ine_verificado VARCHAR(8),
+        url_comprobante VARCHAR,
+        comprobante_verificado VARCHAR(8),
+        url_curp VARCHAR,
+        calle VARCHAR,
+        numero_int VARCHAR,
+        numero_ext VARCHAR,
+        codigo_postal VARCHAR,
+        delegacion VARCHAR,
+        colonia VARCHAR,
+        estado VARCHAR,
+        ciudad VARCHAR,
+        referencia VARCHAR,
+        PRIMARY KEY (id),
+        UNIQUE (correo),
+        UNIQUE (telefono),
+        UNIQUE (curp)
+);
+
+
+SGBD: PostgreSQL
+
+
+CREATE TABLE person (
+  verification_status VARCHAR(8) NOT NULL,
+  url_photo VARCHAR,
+  first_name VARCHAR NOT NULL,
+  last_name VARCHAR NOT NULL,
+  second_last_name VARCHAR,
+  type_gender VARCHAR(15) NOT NULL,
+  id INTEGER NOT NULL,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME,
+  deleted_at DATETIME,
+  PRIMARY KEY (id)
+)

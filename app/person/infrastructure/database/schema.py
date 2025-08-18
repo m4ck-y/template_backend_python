@@ -7,4 +7,4 @@ NAME = "person"
 class PersonSchema:
     NAME = NAME
     TBL_PERSON = TableName(None, "person") #Schema Publico
-    TBL_BIRTH_INFO = TableName(NAME, "birth_info")
+    TBL_BIRTH = TableName(NAME, "birth")
