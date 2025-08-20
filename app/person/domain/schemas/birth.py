@@ -1,7 +1,7 @@
-from app.utils.domain.schemas.basemodel import ORMModel
+from app.utils.domain.schemas.base_schema import BaseORMModel
 from pydantic import Field
 
-class SchemaBirthBase(ORMModel):
+class SchemaBirthBase(BaseORMModel):
     """Base schema for birth information without id_person."""
     key_birth_country: str = Field(..., description="Clave del país de nacimiento.", examples=["MEX"])
     key_birth_state: str = Field(..., description="Clave del estado de nacimiento.", examples=["01"])

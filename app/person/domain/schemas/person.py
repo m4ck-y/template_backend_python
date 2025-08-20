@@ -1,11 +1,11 @@
-from app.utils.domain.schemas.basemodel import ORMModel
+from app.utils.domain.schemas.base_schema import BaseORMModel
 from app.person.domain.enum.gender import EGenderIdentity
 from app.person.domain.schemas.birth import SchemaBirthCreate, SchemaBirth
 from app.utils.enum.verification_status import EVerificationStatus
 from typing import Union, Optional
 from pydantic import Field
 
-class SchemaPersonBase(ORMModel):
+class SchemaPersonBase(BaseORMModel):
     #verification_status: EVerificationStatus
     #url_photo: str = Field(..., examples=["profile.jpg"])#TODO: Service Update Photo
     first_name: str = Field(..., examples=["John"])
