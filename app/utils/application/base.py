@@ -1,65 +1,63 @@
-from typing import List, TypeVar, Generic, Optional
+from typing import List, Generic, Optional
 from app.utils.domain.repository.base_session import TSession
 from app.utils.domain.repository.base_repository import IBaseRepository
-from pydantic import BaseModel
 
+from app.utils.domain.schemas import str_schema_json
+
+from app.utils.domain.schemas.types import TSchemaCreateAPI, TSchemaDetail, TSchemaItem, TSchemaUpdate
+from app.utils.str_class_json import str_class_json
+from app.utils.domain.schemas.str_schema_json import str_schema_json
 from app.utils.enum.str_color import StrColor
-
-# Definimos los tipos genéricos para las entidades y esquemas
-CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
-ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)
+from app.utils.log import log_info
 
 str_color = StrColor()
 
-class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
+class BaseLayerApplication(Generic[TSchemaCreateAPI, TSchemaItem, TSchemaDetail, TSchemaUpdate]):
     """
-
     **Parámetros genéricos:**
-    - `CreateSchemaType`: Tipo que representa el esquema de creación de la entidad.
-    - `UpdateSchemaType`: Tipo que representa el esquema de actualización de la entidad.
-    - `ReturnSchemaType`: Tipo que representa el esquema de la entidad devuelta
-      utilizado para devolver datos con formato listo para la presentación.
+    - `TSchemaCreateAPI`: Tipo que representa el esquema de creación de la entidad desde la API (ejemplo: `SchemaCreateAPIEmail`).
+    - `TSchemaCreateDB`: Tipo que representa el esquema de creación de la entidad (ejemplo: `SchemaCreateDBEmail`). #TODO: delete
+    - `TSchemaItem`: Tipo que representa el esquema de los ítems individuales de la entidad en listados (ejemplo: `SchemaItemEmail`).
+    - `TSchemaDetail`: Tipo que representa el esquema de la entidad devuelta en detalle (ejemplo: `SchemaDetailEmail`).
+    - `TSchemaUpdate`: Tipo que representa el esquema de actualización de la entidad (ejemplo: `SchemaUpdateEmail`).
 
     Capa de aplicación genérica que maneja operaciones CRUD comunes para cualquier tipo de entidad.
     Las clases específicas de entidad deben heredar de esta clase y proporcionar el repositorio y los esquemas correspondientes.
 
     Esta clase abstrae las operaciones básicas de creación, lectura, actualización y eliminación (CRUD),
     delegando la lógica de persistencia al repositorio inyectado.
+
+    Notas:
+    - Esta capa actúa como un intermediario entre el controlador y el repositorio.
+    - Los esquemas de los datos se validan con Pydantic antes de ser enviados al repositorio.
+    - Los métodos en esta clase están pensados para ser reutilizables para diferentes tipos de entidades y no deben incluir lógica de presentación ni de infraestructura.
     """
 
-    def __init__(self, repository: IBaseRepository[CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
+    def __init__(self, repository: IBaseRepository[TSchemaCreateAPI, TSchemaItem, TSchemaDetail, TSchemaUpdate]):
         """
         Inicializa la capa de aplicación con un repositorio.
 
         Args:
-            repository: El repositorio que será utilizado para interactuar con la base de datos.
-            Este repositorio debe implementar operaciones CRUD genéricas (crear, obtener, listar, actualizar y eliminar).
+            repository (IBaseRepository): El repositorio que implementa las operaciones CRUD genéricas.
         """
         self.repository = repository  # El repositorio inyectado que maneja las operaciones de base de datos
+        log_info(str_class_json(self.repository))
 
-        print(
-                "\t",
-                str_color.CYAN("BaseLayerApplication >>> __init__")\
-                .GREEN(", repo:").RESET("\n\t")\
-                .YELLOW(str(type(self.repository)))\
-                .RESET("\n\t")\
-                .RED(str(self.repository)))
-
-    def Create(self, value: CreateSchemaType, db: TSession) -> int:
+    def Create(self, value: TSchemaCreateAPI, db: TSession, auto_commit: bool = True) -> int:  #TODO: add_all (models[])
         """
         Crea una nueva entidad en la base de datos utilizando el repositorio.
 
         Args:
-            value (CreateSchemaType): Los datos de la entidad que se van a crear.
+            value (TSchemaCreateAPI): Los datos de la entidad que se van a crear.
             db (TSession): La sesión activa de la base de datos, que se pasa desde el controlador o el entorno de ejecución.
+            auto_commit (bool): Si se debe hacer commit de la transacción.
 
         Returns:
-            ReturnSchemaType: El objeto recién creado, con su ID u otros datos generados por la base de datos.
+            int: El ID de la nueva entidad creada.
         """
-        return self.repository.Create(value, db)
+        return self.repository.Create(value, db, auto_commit=auto_commit)
 
-    def Get(self, id: int, db: TSession) -> Optional[ReturnSchemaType]:
+    def Get(self, id: int, db: TSession) -> Optional[TSchemaDetail]:
         """
         Obtiene una entidad por su ID desde la base de datos.
 
@@ -68,11 +66,11 @@ class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSch
             db (TSession): La sesión activa de la base de datos.
 
         Returns:
-            Optional[ReturnSchemaType]: La entidad encontrada, o None si no se encuentra.
+            Optional[TSchemaDetail]: La entidad encontrada, o None si no se encuentra.
         """
         return self.repository.Get(id, db)
 
-    def List(self, db: TSession) -> List[ReturnSchemaType]:
+    def List(self, db: TSession) -> List[TSchemaItem]:
         """
         Obtiene todas las entidades almacenadas en la base de datos.
 
@@ -80,33 +78,36 @@ class BaseLayerApplication(Generic[CreateSchemaType, UpdateSchemaType, ReturnSch
             db (TSession): La sesión activa de la base de datos.
 
         Returns:
-            List[ReturnSchemaType]: Una lista de todas las entidades almacenadas en la base de datos.
+            List[TSchemaItem]: Una lista de entidades representadas en un esquema de ítem.
         """
         return self.repository.List(db)
 
-    def Update(self, entity: UpdateSchemaType, db: TSession) -> bool:
+    def Update(self, entity: TSchemaUpdate, db: TSession, auto_commit: bool = True) -> bool:
         """
         Actualiza una entidad existente en la base de datos.
 
         Args:
-            entity (UpdateSchemaType): Los nuevos datos de la entidad que se van a actualizar.
+            entity (TSchemaUpdate): Los nuevos datos de la entidad que se van a actualizar.
             db (TSession): La sesión activa de la base de datos.
+            auto_commit (bool): Si se debe hacer commit de la transacción.
 
         Returns:
-            bool: True si la actualización fue exitosa, False si la entidad no fue encontrada.
+            bool: `True` si la actualización fue exitosa, `False` si la entidad no fue encontrada.
         """
-        return self.repository.Update(entity, db)
+        return self.repository.Update(entity, db, auto_commit=auto_commit)
 
-    def Delete(self, id: int, db: TSession) -> bool:
+    def Delete(self, id: int, db: TSession, auto_commit: bool = True) -> bool:
         """
         Elimina una entidad por su ID de la base de datos.
 
         Args:
             id (int): El ID de la entidad que se desea eliminar.
             db (TSession): La sesión activa de la base de datos.
+            auto_commit (bool): Si se debe hacer commit de la transacción.
 
         Returns:
-            bool: True si la entidad fue eliminada correctamente, False si no se encontró.
+            bool: `True` si la entidad fue eliminada correctamente, `False` si no se encontró.
         """
-        print(str_color.MAGENTA("BaseLayerApplication >>> Delete"), ", repo:", type(self.repository), self.repository)
-        return self.repository.Delete(id, db)
+        log_info(str_class_json(self.repository))
+        return self.repository.Delete(id, db, auto_commit=auto_commit)
+
