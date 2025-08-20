@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, Float, Text, DateTime
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.database.base_model import BaseModelTimeSeries
+from app.utils.infrastructure.database.models.base_model import BaseModelTimeSeries
 from app.health_monitoring.infrastructure.database.schema import HealthMonitoringSchema
 from app.person.infrastructure.database.schema import PersonSchema
 

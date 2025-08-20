@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from app.health_monitoring.infrastructure.database.schema import HealthMonitoringSchema
 
 class Unit(BaseModel):

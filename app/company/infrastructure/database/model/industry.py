@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum, Text
 from sqlalchemy.orm import relationship
 
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from ..schema import SchemaCompany
 
 

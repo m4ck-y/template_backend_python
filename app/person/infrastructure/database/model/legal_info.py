@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from app.person.infrastructure.database.schema import PersonSchema
 from app.person.domain.enum.civil_status import ECivilStatus
 from app.person.domain.enum.curp_sex import CURPSex

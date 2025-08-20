@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.company.domain.enum.organization_size import EOrganizationSize
 from app.company.domain.enum.type_organization import EOrganizationType
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from ..schema import SchemaCompany
 
 

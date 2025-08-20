@@ -21,7 +21,7 @@ de arquitectura limpia, DDD y SOLID.
 
 from typing import TypeVar
 from app.utils.domain.schemas.base_schema import BaseORMModel
-from app.utils.infrastructure.database.base_model import BaseModel as TableBaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel as TableBaseModel
 
 # ---------------------------------------------------------
 # 🧱 Modelo ORM base (SQLAlchemy)

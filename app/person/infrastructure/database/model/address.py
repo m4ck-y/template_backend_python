@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from app.person.domain.enum.contact_type import EAddressType
 from app.person.infrastructure.database.schema import PersonSchema
 

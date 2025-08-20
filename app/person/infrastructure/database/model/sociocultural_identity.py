@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.utils.infrastructure.database.base_model import BaseModel
+from app.utils.infrastructure.database.models.base_model import BaseModel
 from app.person.domain.enum.answer import EAnswerGeneral, EAnswerMigrant
 
 from ..schema import PersonSchema
