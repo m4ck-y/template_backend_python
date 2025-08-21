@@ -1,7 +1,7 @@
-from app.health.infrastructure.database.model.unit import Unit as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
-from app.health.domain.repository.unit import IRepositoryUnit
-from app.health.domain.schemas.unit import (
+from app.health_monitoring.infrastructure.database.model.unit import Unit as Table
+from app.utils.infrastructure.database.implementation import BaseRepository
+from app.health_monitoring.domain.repository.unit import IRepositoryUnit
+from app.health_monitoring.domain.schemas.unit import (
     SchemaUnit as E,
     SchemaCreateUnit as C,
     SchemaUpdateUnit as U,

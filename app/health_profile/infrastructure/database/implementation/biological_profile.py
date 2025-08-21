@@ -1,5 +1,5 @@
 from app.health_profile.infrastructure.database.model.biological_profile import BiologicalProfile as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
+from app.utils.infrastructure.database.implementation import BaseRepository
 from app.health_profile.domain.schemas.biological_profile import (
     SchemaBiologicalProfile as E,
     SchemaCreateBiologicalProfile as C,

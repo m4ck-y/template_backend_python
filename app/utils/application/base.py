@@ -16,7 +16,6 @@ class BaseLayerApplication(Generic[TSchemaCreateAPI, TSchemaItem, TSchemaDetail,
     """
     **Parámetros genéricos:**
     - `TSchemaCreateAPI`: Tipo que representa el esquema de creación de la entidad desde la API (ejemplo: `SchemaCreateAPIEmail`).
-    - `TSchemaCreateDB`: Tipo que representa el esquema de creación de la entidad (ejemplo: `SchemaCreateDBEmail`). #TODO: delete
     - `TSchemaItem`: Tipo que representa el esquema de los ítems individuales de la entidad en listados (ejemplo: `SchemaItemEmail`).
     - `TSchemaDetail`: Tipo que representa el esquema de la entidad devuelta en detalle (ejemplo: `SchemaDetailEmail`).
     - `TSchemaUpdate`: Tipo que representa el esquema de actualización de la entidad (ejemplo: `SchemaUpdateEmail`).

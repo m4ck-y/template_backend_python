@@ -1,5 +1,5 @@
 from app.person.infrastructure.database.model.person import Person as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
+from app.utils.infrastructure.database.implementation import BaseRepository
 #from app.person.domain.repository.person import IRepositoryPerson
 from app.person.domain.schemas.person import (
     SchemaPerson as E,

@@ -1,6 +1,6 @@
-from app.health.infrastructure.database.model.measure_type_group import MeasureTypeGroup as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
-from app.health.domain.schemas.measure_type_group import (
+from app.health_monitoring.infrastructure.database.model.measure_type_group import MeasureTypeGroup as Table
+from app.utils.infrastructure.database.implementation import BaseRepository
+from app.health_monitoring.domain.schemas.measure_type_group import (
     SchemaMeasureTypeGroup as E,
     SchemaCreateMeasureTypeGroup as C,
     SchemaUpdateMeasureTypeGroup as U,

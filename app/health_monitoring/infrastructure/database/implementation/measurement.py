@@ -1,6 +1,6 @@
-from app.health.infrastructure.database.model.measurement import Measurement as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
-from app.health.domain.schemas.measurement import (
+from app.health_monitoring.infrastructure.database.model.measurement import Measurement as Table
+from app.utils.infrastructure.database.implementation import BaseRepository
+from app.health_monitoring.domain.schemas.measurement import (
     SchemaMeasurement as E,
     SchemaCreateMeasurement as C,
     SchemaUpdateMeasurement as U,

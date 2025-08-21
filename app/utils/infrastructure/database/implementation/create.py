@@ -1,22 +1,22 @@
 
 from sqlalchemy.exc import IntegrityError
-from app.base.domain.exception import UniqueConstraintException
-from app.base.domain.repository.session import TSession
-from app.base.domain.schemas.str_schema_json import str_schema_json
-from app.base.domain.schemas.create_api import TCreateAPISchema
-from app.base.domain.schemas.types import (
-    TItemSchema,
-    TDetailSchema,
-    TUpdateSchema,
+from app.utils.domain.exception import UniqueConstraintException
+from app.utils.domain.repository.base_session import TSession
+from app.utils.domain.schemas.str_schema_json import str_schema_json
+from app.utils.domain.schemas.types import (
+    TSchemaItem,
+    TSchemaDetail,
+    TSchemaUpdate,
+    TSchemaCreateAPI
 )
 from app.utils.log import log_error, log_info
-from app.base.infrastructure.database.model_type import TModelType
+from app.utils.infrastructure.database.models.model_type import TModelType
 
-def BaseCreate(model: TModelType, entity: TCreateAPISchema, db: TSession, auto_commit: bool = True) -> int:
+def BaseCreate(model: TModelType, entity: TSchemaCreateAPI, db: TSession, auto_commit: bool = True) -> int:
     """
     Crea una nueva entidad en la base de datos.
     Args:
-        entity (TCreateAPISchema): Datos validados para la nueva entidad.
+        entity (TSchemaCreateAPI): Datos validados para la nueva entidad.
         db (Session): Sesión activa de SQLAlchemy.
         auto_commit (bool): Si se debe hacer commit de la transacción.
     Returns:

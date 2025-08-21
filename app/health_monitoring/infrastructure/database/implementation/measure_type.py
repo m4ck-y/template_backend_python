@@ -1,6 +1,6 @@
-from app.health.infrastructure.database.model.measure_type import MeasureType as Table
-from app.utils.infrastructure.database.base_implementation import BaseRepository
-from app.health.domain.schemas.measure_type import (
+from app.health_monitoring.infrastructure.database.model.measure_type import MeasureType as Table
+from app.utils.infrastructure.database.implementation import BaseRepository
+from app.health_monitoring.domain.schemas.measure_type import (
     SchemaListItemMeasureType as E,
     SchemaCreateMeasureType as C,
     SchemaUpdateMeasureType as U,
