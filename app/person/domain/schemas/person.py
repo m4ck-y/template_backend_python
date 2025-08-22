@@ -20,7 +20,7 @@ class SchemaCreateDBPerson(SchemaPersonBase):
 
 class SchemaItemPerson(SchemaPersonBase):
     verification_status: EVerificationStatus
-    url_photo: str = Field(..., examples=["profile.jpg"])#TODO: Service Update Photo
+    url_photo: Optional[str] = Field(..., examples=["profile.jpg"])#TODO: Service Update Photo
     id: int
 
 
