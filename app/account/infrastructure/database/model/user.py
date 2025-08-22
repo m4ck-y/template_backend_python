@@ -1,17 +1,17 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
+from app.account.infrastructure.database.schema import AccountSchema
+from app.person.infrastructure.database.schema import PersonSchema
 from app.utils.infrastructure.database.models.base_model import BaseModel
-from app.person.domain.enum.gender import EGenderIdentity
-from app.utils.enum.verification_status import EVerificationStatus
-from ..schema import SchemaAccount
 
 class User(BaseModel):
-    __tablename__ = "user"
+    __tablename__ = AccountSchema.TBL_USER.name
 
-    __table_args__ = {"schema": "account"}
+    __table_args__ = {"schema": AccountSchema.TBL_USER.schema}
 
-    id_person = Column(Integer, ForeignKey("person.id"), nullable=False, unique=True)
+    id_person = Column(Integer, ForeignKey(f"{PersonSchema.TBL_PERSON.identifier}.id"), nullable=False, unique=True)
+    # 1:1 | 1 user -> 1 person
     person = relationship("Person", back_populates="user")
     
     username = Column(String(191), nullable=False, unique=True)

@@ -11,7 +11,7 @@ class Email(BaseModel):
     __table_args__ = {'schema': PersonSchema.TBL_EMAIL.schema}
 
     id_person = Column(Integer, ForeignKey(f"{PersonSchema.TBL_PERSON.identifier}.id"))
-    # 1 email -> 1 person
+    # 1:1 | 1 email -> 1 person
     person = relationship("Person", back_populates="list_emails")
 
     type_email = Column(Enum(EEmailType), nullable=False)

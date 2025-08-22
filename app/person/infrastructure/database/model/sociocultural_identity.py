@@ -12,6 +12,7 @@ class SocioculturalIdentity(BaseModel):
     __table_args__ = {'schema': PersonSchema.TBL_SOCIOCULTURAL_IDENTITY.schema}
 
     id_person = Column(Integer, ForeignKey(f'{PersonSchema.TBL_PERSON.identifier}.id'), nullable=False)
+    # 1:1 | 1 sociocultural_identity -> 1 person
     person = relationship("Person", back_populates="sociocultural_identity")
     
     self_considers_indigenous = Column(Enum(EAnswerGeneral), nullable=False)

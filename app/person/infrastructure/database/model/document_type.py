@@ -18,7 +18,7 @@ class DocumentType(BaseModel):
     name = Column(String, nullable=False)
 
     id_category = Column(Integer, ForeignKey(f'{PersonSchema.TBL_DOCUMENT_CATEGORY.identifier}.id'), nullable=False)
-    # 1 document_type -> 1 category
+    # 1:1 | 1 document_type -> 1 category
     category = relationship("DocumentCategory", back_populates="list_document_types")
 
     # 1:N | 1 document_type -> N documents     

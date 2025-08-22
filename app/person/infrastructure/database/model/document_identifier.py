@@ -10,6 +10,7 @@ class DocumentIdentifier(BaseModel):
     __table_args__ = {'schema': PersonSchema.TBL_DOCUMENT_IDENTIFIER.schema}
 
     id_person_identifier = Column(Integer, ForeignKey(f'{PersonSchema.TBL_PERSON_IDENTIFIER.identifier}.id'), nullable=False)
+    # 1:1 | 1 document_identifier -> 1 person_identifier
     person_identifier = relationship("PersonIdentifier", back_populates="document_identifier")
 
     id_document = Column(Integer, ForeignKey(f'{PersonSchema.TBL_DOCUMENT.identifier}.id'), nullable=False)

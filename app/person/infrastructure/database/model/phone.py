@@ -11,7 +11,7 @@ class Phone(BaseModel):
     __table_args__ = {'schema': PersonSchema.TBL_PHONE.schema}
 
     id_person = Column(Integer, ForeignKey(f'{PersonSchema.TBL_PERSON.identifier}.id'))
-    # 1 phone -> 1 person
+    # 1:1 | 1 phone -> 1 person
     person = relationship("Person", back_populates="list_phones")
     
     type_phone = Column(Enum(EPhoneType), nullable=False)

@@ -10,7 +10,7 @@ class Address(BaseModel): #TODO: checar con otro repositorio server_data, column
     __table_args__ = {'schema': PersonSchema.TBL_ADDRESS.schema}
 
     id_person = Column(Integer, ForeignKey(f"{PersonSchema.TBL_PERSON.identifier}.id"))
-    # 1 address -> 1 person
+    # 1:1 | 1 address -> 1 person
     person = relationship("Person", back_populates="list_addresses")
 
     type_address = Column(Enum(EAddressType), nullable=False)

@@ -3,7 +3,7 @@ from app.health_profile.infrastructure.database.init import init as init_health_
 from app.health_monitoring.infrastructure.database.init import init as init_health, Seeder as SeederHealth
 # from app.company.infrastructure.database.init import init as init_company, Seeder as SeederCompany
 # from app.health_facility.infrastructure.database.init import init as init_health_facility, Seeder as SeederHealthFacility
-# from app.account.infrastructure.database.init import init as init_account
+from app.account.infrastructure.database.init import init as init_account
 # from app.security.infrastructure.database.init import init as init_security
 # from app.employee.infrastructure.database.init import init as init_employee
 
@@ -37,7 +37,7 @@ def init_db():
     init_health()
     #init_company()
     #init_health_facility()
-    #init_account()
+    init_account()
     #init_security()
     #init_employee()
     Base.metadata.create_all(bind=engine)

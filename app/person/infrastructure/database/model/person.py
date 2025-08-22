@@ -59,7 +59,7 @@ class Person(BaseModel):
 
     # ACCOUNT
     # 1:1 | 1 person -> 1 user
-    # -- user = relationship("User", back_populates="person", uselist=False)
+    user = relationship("User", back_populates="person", uselist=False)
 
     # 1:N | 1 person -> N employee
     # -- list_employments = relationship("Employee", back_populates="person")

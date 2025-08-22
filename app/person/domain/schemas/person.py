@@ -1,5 +1,5 @@
 from app.person.domain.enum.gender import EGenderIdentity
-from app.person.domain.schemas.birth import SchemaBirthCreate, SchemaBirth
+from app.person.domain.schemas.birth import SchemaBirth
 from app.utils.enum.verification_status import EVerificationStatus
 from app.utils.domain.schemas.base_schema import BaseORMModel
 from typing import Union, Optional
