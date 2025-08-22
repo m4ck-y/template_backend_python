@@ -1,18 +1,19 @@
 from fastapi import APIRouter, FastAPI, HTTPException, status, Depends
-from sqlalchemy.orm import Session
-from typing import TypeVar, Generic, List, Optional
-from pydantic import BaseModel
+from sqlalchemy.orm import Session # TODO
+from typing import  Generic, List, Optional
 from app.config.db import GetSession
 from app.utils.application.base import BaseLayerApplication
+from app.utils.domain.schemas.types import TSchemaItem, TSchemaDetail, TSchemaUpdate, TSchemaCreateAPI
+from app.utils.domain.exception import UniqueConstraintException
 
-# Tipos genéricos para los esquemas
-CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
-ReturnSchemaType = TypeVar("ReturnSchemaType", bound=BaseModel)
-
-class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaType]):
-
+class BaseLayerService(Generic[TSchemaCreateAPI, TSchemaItem, TSchemaDetail, TSchemaUpdate]):
     """
+    **Parámetros genéricos:**
+    - `TSchemaCreateAPI`: Tipo que representa el esquema de creación de la entidad (ejemplo: `UserCreate`).
+    - `TSchemaItem`: Tipo que representa el esquema de los ítems individuales de la entidad en listados (ejemplo: `UserListItem`).
+    - `TSchemaDetail`: Tipo que representa el esquema de la entidad devuelta en detalle (ejemplo: `UserDetail`).
+    - `TSchemaUpdate`: Tipo que representa el esquema de actualización de la entidad (ejemplo: `UserUpdate`).
+
     Capa de servicio genérica para operaciones CRUD y rutas API en FastAPI.
 
     Esta clase configura las rutas para manejar operaciones de creación, obtención, 
@@ -37,11 +38,13 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
     def __init__(
             self,
             api_server: FastAPI,
-            application_layer: BaseLayerApplication[CreateSchemaType, UpdateSchemaType, ReturnSchemaType],
-            schema_create: CreateSchemaType,
-            schema_update: UpdateSchemaType, 
-            schema_return: ReturnSchemaType,
-            route_name: str, route_parent: str = None):
+            application_layer: BaseLayerApplication[TSchemaCreateAPI, TSchemaItem, TSchemaDetail, TSchemaUpdate],
+            schema_create: TSchemaCreateAPI,
+            schema_item: TSchemaItem,
+            schema_detail: TSchemaDetail,
+            schema_update: TSchemaUpdate, 
+            route_name: str, 
+            route_parent: str = None):
         
 
         route_name = f"{route_parent}/{route_name}" if route_parent else route_name
@@ -51,10 +54,11 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         # Configura el router para el recurso
         self.api_router = APIRouter(prefix=f"/{route_name}", tags=tags)
         # Capa de aplicación que maneja operaciones CRUD
-        self.application_layer = application_layer
+        self.application_layer: BaseLayerApplication = application_layer
         self.schema_create = schema_create
         self.schema_update = schema_update
-        self.schema_return = schema_return
+        self.schema_item = schema_item  # Esquema para los items en la lista
+        self.schema_detail = schema_detail
         self.setup_routes(api_server)
 
     def setup_routes(self, api_server: FastAPI):
@@ -73,14 +77,14 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         schema_update = self.schema_update
 
         def Create(data: schema_create, db: Session = Depends(GetSession)) -> int: # type: ignore
-            return self.application_layer.Create(data, db)
+            return self.Create(data, db)
         
         def Update(data: schema_update, db: Session = Depends(GetSession)) -> bool: # type: ignore
-            return self.application_layer.Update(data, db)
+            return self.Update(data, db)
 
         self.api_router.post("", response_model=int)(Create)
-        self.api_router.get("/list", response_model=List[self.schema_return])(self.List)
-        self.api_router.get("/{id}", response_model=self.schema_return)(self.Get)
+        self.api_router.get("/list", response_model=List[self.schema_item])(self.List)
+        self.api_router.get("/{id}", response_model=self.schema_detail)(self.Get)
         self.api_router.put("", response_model=bool)(Update)
         self.api_router.delete("/{id}", response_model=bool)(self.Delete)
 
@@ -89,7 +93,7 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         # Incluye el router en la API principal
         api_server.include_router(self.api_router)
 
-    def Create(self, data: CreateSchemaType, db: Session = Depends(GetSession)) -> int:
+    def Create(self, data: TSchemaCreateAPI, db: Session) -> int:
         """
         Crea una nueva entidad en la base de datos.
 
@@ -100,9 +104,21 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         Returns:
             int: ID de la nueva entidad.
         """
-        return self.application_layer.Create(data, db)
+        try:
+            r = self.application_layer.Create(data, db)
+            return r
+        except UniqueConstraintException as e:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=str(e.orig)
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(e)
+            )
 
-    def List(self, db: Session = Depends(GetSession)) -> List[ReturnSchemaType]:
+    def List(self, db: Session = Depends(GetSession)) -> List[TSchemaItem]:
         """
         Lista todas las entidades almacenadas en la base de datos.
 
@@ -114,7 +130,7 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         """
         return self.application_layer.List(db)
 
-    def Get(self, id: int, db: Session = Depends(GetSession)) -> Optional[ReturnSchemaType]:
+    def Get(self, id: int, db: Session = Depends(GetSession)) -> Optional[TSchemaDetail]:
         """
         Obtiene una entidad por su ID.
 
@@ -125,9 +141,14 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         Returns:
             Optional: La entidad encontrada, o None si no existe.
         """
-        return self.application_layer.Get(id, db)
+        r = self.application_layer.Get(id, db)
 
-    def Update(self, data: UpdateSchemaType, db: Session = Depends(GetSession)) -> bool:
+        if r is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
+        
+        return r
+
+    def Update(self, data: TSchemaUpdate, db: Session) -> bool:
         """
         Actualiza una entidad existente en la base de datos.
 
@@ -138,7 +159,10 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         Returns:
             bool: True si se actualizó correctamente, False si no se encontró la entidad.
         """
-        return self.application_layer.Update(data, db)
+        r = self.application_layer.Update(data, db)
+        if not r:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
+        return True
 
     def Delete(self, id: int, db: Session = Depends(GetSession)) -> bool:
         """
@@ -151,4 +175,7 @@ class BaseLayerService(Generic[CreateSchemaType, UpdateSchemaType, ReturnSchemaT
         Returns:
             bool: True si se eliminó correctamente, False si no se encontró la entidad.
         """
-        return self.application_layer.Delete(id, db)
+        r = self.application_layer.Delete(id, db)
+        if not r:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Entity not found")
+        return True
