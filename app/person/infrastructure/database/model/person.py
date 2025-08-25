@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy import Column, String, Enum
 from sqlalchemy.orm import relationship
 
 from app.utils.infrastructure.database.models.base_model import BaseModel
