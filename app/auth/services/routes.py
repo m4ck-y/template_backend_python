@@ -1,8 +1,9 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, status
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, Response
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from app.auth.domain.schemas import SchemaLogin
+from app.auth.domain.schemas import SchemaLogin, TokenPayload
 from app.auth.domain.exceptions import (
     UserNotFoundException, 
     InvalidCredentialsException, 
@@ -12,11 +13,12 @@ from app.auth.application.auth import AuthApplication
 from app.account.domain.schemas.user import SchemaDetailUser
 from app.config.db import GetSession
 from app.utils.log import log_info, log_error
+from app.utils.jwt import create_access_token
 
 ROUTE_NAME = "auth"
 
 router_auth = APIRouter(
-    prefix="/auth",
+    #prefix="/auth",
     tags=[ROUTE_NAME],
     responses={
         401: {"description": "Credenciales inválidas"},
@@ -25,7 +27,7 @@ router_auth = APIRouter(
     }
 )
 
-security = HTTPBearer()
+#security = HTTPBearer() TODO: investigar que es esto , y para que sirve
 
 __app: AuthApplication = None
 
@@ -122,6 +124,7 @@ Autentica un usuario con sus credenciales y retorna la información del usuario.
 )
 def login_user(
     credentials: SchemaLogin, 
+    response: Response,
     db: Session = Depends(GetSession)
 ) -> SchemaDetailUser:
     """
@@ -143,7 +146,29 @@ def login_user(
         user = __app.Login(credentials, db)
         
         log_info(f"Autenticación exitosa para usuario: {credentials.username}")
+        payload = TokenPayload(
+            sub=str(user.id),
+            username=user.username,
+            name=f"{user.person.first_name} {user.person.last_name}",
+            url_photo=None
+        )
+
+        access_token = create_access_token(payload.to_dict())
+
+        log_info(f"Token generado para usuario {credentials.username}: <type>{type(access_token)}</type> {access_token}")
+
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            samesite="none", #cuando este el en produccion cambiar a lax
+            secure=False #cuando este en el produccion cambiar a True
+        )
+
         return user
+
+
+        #return user
         
     except UserNotFoundException as e:
         log_error(f"Usuario no encontrado: {e.username}")
@@ -204,36 +229,35 @@ def create_token(
     return login_user(credentials, db)
 
 
-def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    
+from app.utils.jwt import verify_token
+@router_auth.get("/verify_token", response_model=dict)
+def VerifyToken(value=Depends(verify_token)):
     """
-    Verifica un token de autorización Bearer.
-    
-    Función auxiliar para validar tokens JWT en endpoints protegidos.
-    Actualmente es un placeholder para futura implementación de JWT.
-    
-    Args:
-        credentials: Credenciales Bearer del header Authorization
-        
-    Returns:
-        dict: Información del token validado
-        
-    Raises:
-        HTTPException: Si el token es inválido o ha expirado
-        
-    Note:
-        Esta función requiere implementación de JWT para funcionalidad completa.
+    Verifica si el token JWT es válido, extraído ya sea de la cookie o del encabezado.
     """
-    # TODO: Implementar validación JWT cuando se agregue soporte de tokens
-    token = credentials.credentials
+    log_info(f"verify_token: {value}"), type(value)
+
+    # Asegurarse de que el token esté presente y validado
+    if value:
+        return JSONResponse(content={"message": "Token is valid"})
     
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token de autorización requerido",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    # Placeholder para validación JWT
-    # En el futuro, aquí se validaría el token JWT y se extraería la información del usuario
-    return {"token": token, "valid": True}
-    
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+
+'''@router_auth.post("/refresh_token", dependencies=[Depends(verify_token)])
+def RefreshToken(value: SchemeUserRefreshToken, request: Request):
+    """
+    Endpoint para renovar el token. Requiere autenticación con un token válido.
+    """
+    log_info(f"refresh_token: {value}"), type(value)
+    #return {"access_token": create_access_token()}
+
+
+   # Obtener el token de la cookie si no se pasa en el encabezado
+    token_from_cookie = request.cookies.get("access_token")
+    if token_from_cookie:
+        access_token = create_access_token(data=value.to_dict())
+        #return {"access_token": access_token} #TODO: DEVOLVER el token en la cookie
+
+    # Si no hay token, lanzar error
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No token found")'''

@@ -4,9 +4,21 @@ Schemas del dominio de autenticación.
 Define las estructuras de datos utilizadas para operaciones de autenticación
 y autorización en el sistema, siguiendo los estándares de Pydantic v2.
 """
-
+from dataclasses import dataclass, asdict
 from pydantic import BaseModel, Field
 from typing import Optional
+
+
+@dataclass
+class TokenPayload:
+    sub: str
+    username: str
+    name: str
+    url_photo: Optional[str]
+
+    # Método para convertir la instancia a un diccionario
+    def to_dict(self) -> dict[str, str]:
+        return asdict(self)
 
 
 class SchemaLogin(BaseModel):
@@ -21,14 +33,6 @@ class SchemaLogin(BaseModel):
                        Debe corresponder a un usuario registrado.
         password (str): **Contraseña en texto plano** del usuario.
                        Se validará contra la contraseña hasheada almacenada.
-    
-    Example:
-        >>> login_data = SchemaLogin(
-        ...     username="john.doe",
-        ...     password="mi_password_seguro"
-        ... )
-        >>> login_data.username
-        "john.doe"
     """
     
     username: str = Field(
@@ -46,15 +50,6 @@ class SchemaLogin(BaseModel):
         description="Contraseña del usuario en texto plano",
         examples=["mi_password_123", "contraseña_segura"]
     )
-
-    class Config:
-        """Configuración del schema."""
-        json_schema_extra = {
-            "example": {
-                "username": "john.doe",
-                "password": "mi_password_seguro"
-            }
-        }
 
 
 class SchemaTokenResponse(BaseModel):

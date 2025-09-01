@@ -247,9 +247,9 @@ Una vez completadas las correcciones, el módulo person será completamente port
 
 ## 👤 Información del Autor
 
-**Desarrollador:** Kiro AI Assistant  
-**GitHub:** [@kiro-ai](https://github.com/kiro-ai)  
-**Email:** kiro@aws.com  
+**Desarrollador:** Macario Alvarado Hernández  
+**GitHub:** [@m4ck-y](https://github.com/m4ck-y)  
+**Email:** macario.alvaradohdez@gmail.com  
 **Fecha:** 18 de Enero de 2025  
 
 ---
