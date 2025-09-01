@@ -1,6 +1,7 @@
 #from typing import Optional
 from pydantic import Field
 from app.utils.domain.schemas.base_schema import BaseORMModel
+from app.person.domain.schemas.person import SchemaDetailPerson
 
 class SchemaUserBase(BaseORMModel):
     """
@@ -31,13 +32,21 @@ class SchemaItemUser(SchemaUserBase):
 
 class SchemaDetailUser(SchemaItemUser):
     """
-    Esquema para ver el detalle completo de un usuario.
+    Esquema para ver el detalle completo de un usuario (sin contraseña).
     """
-    pass
+    person: SchemaDetailPerson
 
 class SchemaUserUpdate(SchemaUserBase):
     """
     Esquema para actualizar un usuario.
     """
     id: int
+
     #password: Optional[str] = Field(None, description="Nueva contraseña (opcional).")
+
+
+class SchemaDetailUserWithPassword(SchemaDetailUser):
+    """
+    Esquema que representa un usuario con su contraseña hasheada.
+    """
+    password: str = Field(..., description="Contraseña hasheada del usuario, en formato de texto cifrado.")

@@ -9,7 +9,7 @@ from app.account.domain.schemas.user import (
 from app.utils.application.base import BaseLayerApplication
 from app.utils.infrastructure.service.base import BaseLayerService
 
-ROUTE_NAME = "account"
+ROUTE_NAME = "user"
 
 class ServiceUser(BaseLayerService[C, I, E, U]):
     def __init__(self, router: FastAPI, app_layer: BaseLayerApplication, route_parent: str = None):
