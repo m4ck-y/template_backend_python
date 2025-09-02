@@ -54,7 +54,10 @@ def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
 
     # Si el token no está en el header, intentamos obtenerlo de la cookie
     if not token_from_header and token_from_cookie:
+        log_info("TOKEN in cookie")
         token = token_from_cookie
+    else:
+        log_info("TOKEN in header")
     
     log_info(f"verify_token: {token}, type: {type(token)}")
 
@@ -65,6 +68,7 @@ def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
         if username is None:
             log_info("username is None")
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=CREDENTIALS_INVALID_ERROR, headers={"WWW-Authenticate": "Bearer"})
+        log_info("payload:", payload)
         return payload
     
     except InvalidTokenError as e:

@@ -198,7 +198,8 @@ def login_user(
             detail="Error interno del servidor durante la autenticación"
         )
 
-
+#TODO: explicar que esto es para el scope de swaggerui
+from fastapi.security import OAuth2PasswordRequestForm
 @router_auth.post(
     "/token",
     response_model=SchemaDetailUser,
@@ -213,7 +214,9 @@ Se recomienda usar `/auth/login` para nuevas implementaciones.
     deprecated=True
 )
 def create_token(
-    credentials: SchemaLogin, 
+    #credentials: SchemaLogin,
+    response: Response,
+    form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(GetSession)
 ) -> SchemaDetailUser:
     """
@@ -226,17 +229,18 @@ def create_token(
     Returns:
         SchemaDetailUser: Información del usuario autenticado
     """
-    return login_user(credentials, db)
+    credentials = SchemaLogin(username=form_data.username, password=form_data.password)
+    return login_user(credentials, response, db)
 
-
+#TODO: REFRESH TOKEN
     
 from app.utils.jwt import verify_token
 @router_auth.get("/verify_token", response_model=dict)
-def VerifyToken(value=Depends(verify_token)):
+def verify_token(value=Depends(verify_token)):
     """
     Verifica si el token JWT es válido, extraído ya sea de la cookie o del encabezado.
     """
-    log_info(f"verify_token: {value}"), type(value)
+    log_info(f"verify_token: {value}")
 
     # Asegurarse de que el token esté presente y validado
     if value:
