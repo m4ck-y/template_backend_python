@@ -52,6 +52,7 @@ def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     token_from_header = token
     token_from_cookie = request.cookies.get("access_token")  # Si el token viene de la cookie
 
+    log_info(f"Token from header: {token_from_header}, Token from cookie: {token_from_cookie}")
     # Si el token no está en el header, intentamos obtenerlo de la cookie
     if not token_from_header and token_from_cookie:
         log_info("TOKEN in cookie")

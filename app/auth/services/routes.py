@@ -167,9 +167,6 @@ def login_user(
         )
 
         return user
-
-
-        #return user
         
     except UserNotFoundException as e:
         log_error(f"Usuario no encontrado: {e.username}")
@@ -254,7 +251,8 @@ Se recomienda usar `/auth/login` para nuevas implementaciones.
 )
 def create_token(
     response: Response,
-    form_data: OAuth2PasswordRequestForm = Depends()
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(GetSession)
 ) -> SchemaDetailUser:
     """
     Endpoint legacy para generar token compatible con Swagger UI OAuth2.
@@ -312,7 +310,7 @@ def create_token(
     
     # Delegar toda la lógica de autenticación a login_user (DRY principle)
     # Esto incluye: validación de usuario, generación JWT, cookies, manejo de excepciones
-    return login_user(credentials, response)
+    return login_user(credentials, response, db)
 
 #TODO: REFRESH TOKEN
     

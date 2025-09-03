@@ -5,7 +5,7 @@ from app.config.init_db import init_db
 from app.config.init_api import init_api
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(swagger_ui_parameters={"withCredentials": True},)
 
 app.add_middleware(
     CORSMiddleware,
