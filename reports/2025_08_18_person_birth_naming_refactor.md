@@ -1,6 +1,6 @@
 # 📊 Reporte de Refactoring de Naming - Módulo person
 
-**Fecha:** 18 de Enero de 2025  
+**Fecha:** 18 de Agosto de 2025  
 **Módulo:** person  
 **Tipo de Cambio:** Refactoring de nomenclatura de entidad  
 **Estado:** ✅ COMPLETADO  

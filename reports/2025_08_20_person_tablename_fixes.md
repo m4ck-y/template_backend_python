@@ -1,6 +1,6 @@
 # 📊 Reporte de Correcciones TableName - Módulo person
 
-**Fecha:** 18 de Enero de 2025  
+**Fecha:** 20 de Agosto de 2025  
 **Módulo:** person  
 **Tipo de Cambio:** Corrección de referencias TableName  
 **Estado:** ✅ COMPLETADO  

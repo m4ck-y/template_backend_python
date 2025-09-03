@@ -1,6 +1,6 @@
 # 📊 Reporte de Migración TableName - Módulo person
 
-**Fecha:** 18 de Enero de 2025  
+**Fecha:** 18 de Agosto de 2025  
 **Módulo:** person  
 **Tipo de Cambio:** Migración arquitectónica a sistema TableName  
 **Estado:** ⚠️ EN PROGRESO (Requiere correcciones)  

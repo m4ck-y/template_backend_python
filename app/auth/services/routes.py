@@ -1,7 +1,8 @@
 from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, Response
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from pydantic import ValidationError
 
 from app.auth.domain.schemas import SchemaLogin, TokenPayload
 from app.auth.domain.exceptions import (
@@ -198,39 +199,120 @@ def login_user(
             detail="Error interno del servidor durante la autenticación"
         )
 
-#TODO: explicar que esto es para el scope de swaggerui
-from fastapi.security import OAuth2PasswordRequestForm
+# OAuth2PasswordRequestForm es para compatibilidad con Swagger UI OAuth2
 @router_auth.post(
     "/token",
     response_model=SchemaDetailUser,
     summary="🎫 Generar token de acceso",
     description="""
-Endpoint legacy para compatibilidad. Redirige a /auth/login.
+Endpoint legacy para compatibilidad con Swagger UI OAuth2.
 
 ### ⚠️ Deprecado:
 Este endpoint se mantiene por compatibilidad con versiones anteriores.
 Se recomienda usar `/auth/login` para nuevas implementaciones.
+
+### 📋 Validaciones de Entrada:
+- **Username:** mínimo 3 caracteres, máximo 50
+- **Password:** mínimo 6 caracteres, máximo 100
+
+### 🔄 Proceso:
+1. Convierte OAuth2PasswordRequestForm a SchemaLogin
+2. Valida credenciales con Pydantic
+3. Redirige a login_user para autenticación completa
 """,
+    responses={
+        422: {
+            "description": "Error de validación en formato estándar FastAPI",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": [
+                            {
+                                "type": "string_too_short",
+                                "loc": ["password"],
+                                "msg": "String should have at least 6 characters",
+                                "input": "123",
+                                "ctx": {"min_length": 6}
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        400: {
+            "description": "Error procesando credenciales",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "detail": "Error procesando las credenciales"
+                    }
+                }
+            }
+        }
+    },
     deprecated=True
 )
 def create_token(
-    #credentials: SchemaLogin,
     response: Response,
-    form_data: OAuth2PasswordRequestForm = Depends(),
-    db: Session = Depends(GetSession)
+    form_data: OAuth2PasswordRequestForm = Depends()
 ) -> SchemaDetailUser:
     """
-    Endpoint legacy para generar token (redirige a login).
+    Endpoint legacy para generar token compatible con Swagger UI OAuth2.
+    
+    Convierte OAuth2PasswordRequestForm a SchemaLogin y redirige a login_user
+    para reutilizar toda la lógica de autenticación, manejo de excepciones y
+    generación de tokens JWT.
     
     Args:
-        credentials: Credenciales de login
-        db: Sesión de base de datos
+        form_data (OAuth2PasswordRequestForm): **Formulario OAuth2** con username y password
+                                              desde Swagger UI o cliente OAuth2.
+        response (Response): **Objeto Response** para configurar cookies JWT.
         
     Returns:
-        SchemaDetailUser: Información del usuario autenticado
+        SchemaDetailUser: Información completa del usuario autenticado sin contraseña.
+        
+    Raises:
+        HTTPException: 422 para errores de validación Pydantic (formato estándar FastAPI),
+                      400 para errores de procesamiento,
+                      401/403/404/500 propagados desde login_user.
+    
+    Note:
+        Este endpoint mantiene compatibilidad con el flujo OAuth2 de Swagger UI
+        mientras reutiliza completamente la lógica de autenticación de /login.
     """
-    credentials = SchemaLogin(username=form_data.username, password=form_data.password)
-    return login_user(credentials, response, db)
+    # Convertir OAuth2PasswordRequestForm a SchemaLogin con validación Pydantic
+    try:
+        credentials = SchemaLogin(username=form_data.username, password=form_data.password)
+    except ValidationError as e:
+        log_error(f"Error al parsear credenciales: {str(e)}")
+        
+        # Convertir ValidationError al formato estándar de FastAPI para máxima compatibilidad
+        # Este formato es idéntico al que FastAPI usa internamente para errores 422
+        error_details = [
+            {
+                "type": error['type'],           # Tipo de error (string_too_short, etc.)
+                "loc": error['loc'],             # Ubicación del error (campo)
+                "msg": error['msg'],             # Mensaje descriptivo
+                "input": error.get('input', None),  # Valor que causó el error
+                "ctx": error.get('ctx', {})      # Contexto adicional (min_length, etc.)
+            }
+            for error in e.errors()
+        ]
+        
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=error_details  # Formato estándar FastAPI para errores de validación
+        )
+    except Exception as e:
+        log_error(f"Error inesperado al parsear credenciales: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Error procesando las credenciales"
+        )
+    
+    # Delegar toda la lógica de autenticación a login_user (DRY principle)
+    # Esto incluye: validación de usuario, generación JWT, cookies, manejo de excepciones
+    return login_user(credentials, response)
 
 #TODO: REFRESH TOKEN
     
