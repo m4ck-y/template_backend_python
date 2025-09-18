@@ -161,8 +161,8 @@ def login_user(
         response.set_cookie(
             key="access_token",
             value=access_token,
-            httponly=True,
-            samesite="none", #cuando este el en produccion cambiar a lax
+            httponly=False,
+            samesite="lax", #cuando este el en produccion cambiar a lax
             secure=False #cuando este en el produccion cambiar a True
         )
 

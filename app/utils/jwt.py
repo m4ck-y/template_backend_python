@@ -40,29 +40,72 @@ def create_access_token(data: dict[str, str], expires_delta: timedelta | None = 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+def is_valid_token(token: str) -> bool:
+    """
+    Valida que el token sea realmente válido antes de usarlo.
+    
+    Verifica que el token:
+    - No sea None
+    - No sea una cadena vacía
+    - No sea "undefined" o "null" (casos típicos de errores en JavaScript)
+    - No sea solo espacios
+    
+    Args:
+        token (str): Token a validar
+        
+    Returns:
+        bool: True si el token es válido, False en caso contrario
+    """
+    if not token:
+        return False
+    # Solo aplicar lower() para la comparación, no modificar el token original
+    token_clean = token.strip().lower()
+    return token_clean not in ["", "undefined", "null"]
+
+
 def verify_token(request: Request, token: str = Depends(oauth2_scheme)):
     """
     Verifica el token. El token puede provenir de dos fuentes:
-    1. Cookie 'access_token'
-    2. Header 'Authorization'
+    1. Header 'Authorization' (prioridad)
+    2. Cookie 'access_token' (fallback)
     
-    Si no se encuentra el token en ninguna de estas fuentes, lanza un error.
+    Valida el contenido del token antes de usarlo, no solo su existencia.
+    Si no se encuentra un token válido en ninguna fuente, lanza un error.
     """
 
     token_from_header = token
-    token_from_cookie = request.cookies.get("access_token")  # Si el token viene de la cookie
+    token_from_cookie = request.cookies.get("access_token")
 
-    log_info(f"Token from header: {token_from_header}, Token from cookie: {token_from_cookie}")
-    # Si el token no está en el header, intentamos obtenerlo de la cookie
-    if not token_from_header and token_from_cookie:
+    # Limpieza básica (evitar problemas de espacios)
+    token_from_header = token_from_header.strip() if token_from_header else None
+    token_from_cookie = token_from_cookie.strip() if token_from_cookie else None
+
+    log_info(f"Token from header: {type(token_from_header)} = {token_from_header}")
+    log_info(f"Token from cookie: {type(token_from_cookie)} = {token_from_cookie}")
+
+    # Usar el token del header si es válido; si no, usar el de la cookie
+    if is_valid_token(token_from_header):
+        log_info("TOKEN in header")
+        token = token_from_header
+    elif is_valid_token(token_from_cookie):
         log_info("TOKEN in cookie")
         token = token_from_cookie
     else:
-        log_info("TOKEN in header")
-    
+        log_info("NO token found")
+        token = None
+
     log_info(f"verify_token: {token}, type: {type(token)}")
 
-     # Decodificar el token
+    # Si no hay token válido, lanzar error inmediatamente
+    if not token:
+        log_info("No valid token found in header or cookie")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, 
+            detail="No valid authentication token found",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    # Decodificar el token
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
