@@ -1,4 +1,4 @@
-from app.config.db import Base, datetime_now
+from app.config.db import Base, datetime_now, get_datetime_timezone_column_type
 from sqlalchemy import Column, DateTime, Integer
 
 class BaseModel(Base):
@@ -33,21 +33,21 @@ class BaseModel(Base):
     """
 
     # Fecha y hora de creación del registro
-    created_at = Column(DateTime, default=datetime_now, nullable=False)
+    created_at = Column(get_datetime_timezone_column_type(), default=datetime_now, nullable=False)
     """
     Almacena la fecha y hora en la que se creó el registro. Se asigna automáticamente mediante `datetime_now` cuando se crea un nuevo registro.
     Este campo es obligatorio (nullable=False) y no puede estar vacío.
     """
 
     # Fecha y hora de la última actualización del registro
-    updated_at = Column(DateTime, onupdate=datetime_now)
+    updated_at = Column(get_datetime_timezone_column_type(), onupdate=datetime_now)
     """
     Almacena la fecha y hora de la última actualización del registro. Se actualiza automáticamente cada vez que el registro es modificado.
     Este campo puede ser `None` si el registro nunca ha sido actualizado después de su creación.
     """
 
     # Fecha y hora de eliminación del registro (soft delete)
-    deleted_at = Column(DateTime, nullable=True)
+    deleted_at = Column(get_datetime_timezone_column_type(), nullable=True)
     """
     Se utiliza para marcar el registro como eliminado sin eliminarlo físicamente de la base de datos.
     Este campo es opcional (nullable=True) y será `None` si el registro no ha sido marcado como eliminado.
@@ -70,7 +70,7 @@ class BaseModelTimeSeries(BaseModel):
     
     __abstract__ = True  # Asegura que no se cree una tabla para esta clase base, solo para las clases que hereden de ella.
 
-    event_at = Column(DateTime, default=datetime_now, nullable=False)
+    event_at = Column(get_datetime_timezone_column_type(), default=datetime_now, nullable=False)
     """
     Fecha y hora real del evento. Este campo es obligatorio y se establece automáticamente al momento de la creación.
     """

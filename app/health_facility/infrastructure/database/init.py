@@ -74,7 +74,5 @@ def Seeder(id_health_industry: int):
     session.commit()
 
     print("""
-
         -----------------
-          
 """)

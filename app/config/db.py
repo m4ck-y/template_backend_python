@@ -36,6 +36,13 @@ def datetime_now(t_zone=timezone.utc) -> datetime:
         return datetime.now(t_zone)
     return datetime.now(t_zone).astimezone(pytz.utc)
 
+def get_datetime_timezone_column_type():
+    if is_db_postgres():
+        from sqlalchemy import DateTime
+        return DateTime(timezone=True)
+    from sqlalchemy import Text
+    return Text
+
 Base = declarative_base()
 
 def is_db_postgres():
